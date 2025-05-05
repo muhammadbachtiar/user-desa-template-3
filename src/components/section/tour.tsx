@@ -4,7 +4,8 @@ import useInformation from "@/hooks/settings/useInformation";
 
 const Tour = () => {
 
-    const { data, isLoading, isFetching, refetch, isError } = useInformation({}, "tour");
+    // const { data, isLoading, isFetching, refetch, isError } = useInformation({}, "tour");
+    const { data } = useInformation({}, "tour");
   
   return (
        <>
