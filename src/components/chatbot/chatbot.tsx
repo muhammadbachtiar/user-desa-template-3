@@ -19,6 +19,19 @@ const Chatbot = () => {
           'Content-Type': 'application/json',
         }
 		},
+    initialMessages: [
+      'Hi, Nama saya Aruna. Ada yang bisa saya bantu?',
+    ],
+    i18n: {
+      en: {
+        title: 'Chatbot',
+        subtitle: '',
+        footer: '',
+        getStarted: 'New Conversation',
+        inputPlaceholder: 'Type your question..',
+        closeButtonTooltip: ''
+      },
+    },
     }
   );
 	}, [base64]);

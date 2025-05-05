@@ -5,7 +5,6 @@ import { useEffect, useState } from "react"
 import Select, { type SingleValue } from "react-select"
 import type { StylesConfig } from "react-select"
 import useCategory from "@/hooks/contents/article/useCategory"
-import { console } from "node:inspector"
 
 type SelectCategoryProps = {
   setCategoryId: React.Dispatch<React.SetStateAction<number>>
