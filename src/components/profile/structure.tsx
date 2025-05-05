@@ -8,7 +8,8 @@ import OrgChart from "@balkangraph/orgchart.js";
 import { useEffect } from "react";
 
 const Structure = () => {
-    const { data: structure, isLoading, isFetching, refetch, isError } = useStructure();
+    // const { data: structure, isLoading, isFetching, refetch, isError } = useStructure();
+    const { data: structure } = useStructure();
 
     useEffect(() => {
        new OrgChart("#tree", {

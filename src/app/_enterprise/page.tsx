@@ -11,8 +11,12 @@ export default function Home() {
 const [categoryId, setCategoryId] = useState(0);
 const [search, setSearch] = useState('');
 
-const { data: setting, isLoading: isSettingLoading, isFetching: isSettingFetching, refetch: refetchSetting, isError: isSettingError } = useInformation({}, "enterprise");
-const { data, isLoading, isFetching, refetch, isError } = useEnterprise({"search": search, "categoryId": categoryId});
+// const { data: setting, isLoading: isSettingLoading, isFetching: isSettingFetching, refetch: refetchSetting, isError: isSettingError } = useInformation({}, "enterprise");
+// const { data, isLoading, isFetching, refetch, isError } = useEnterprise({"search": search, "categoryId": categoryId});
+
+const { data: setting } = useInformation({}, "enterprise");
+const { data, isLoading, isFetching,  isError } = useEnterprise({"search": search, "categoryId": categoryId});
+
 const backgroundStyle = setting?.value?.imageUrl 
     ? { backgroundImage: `url(${setting.value.imageUrl})` }
     : { backgroundColor: '#f3f4f6' };

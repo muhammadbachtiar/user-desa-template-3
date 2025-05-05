@@ -8,8 +8,8 @@ import Infografis from "../section/infografis";
 
 export default function AsideContent({ children }: { children: React.ReactNode}) {
 
-    const { data: articles, isLoading: isArticlesLoading, isFetching: isArticlesFetching, refetch: refetchArticles, isError: isArticlesError } = useArticle();
-
+    // const { data: articles, isLoading: isArticlesLoading, isFetching: isArticlesFetching, refetch: refetchArticles, isError: isArticlesError } = useArticle();
+    const { data: articles} = useArticle();
 
   return (
     <div className="flex flex-col md:flex-row w-full">

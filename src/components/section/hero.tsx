@@ -1,7 +1,8 @@
 import useInformation from "@/hooks/settings/useInformation";
 
 export default function Hero() {
-    const { data, isLoading, isFetching, refetch, isError } = useInformation({}, 'hero');
+    // const { data, isLoading, isFetching, refetch, isError } = useInformation({}, 'hero');
+    const { data } = useInformation({}, 'hero');
 
   return (
     <section className="relative h-3/4 flex justify-center items-center">

@@ -33,8 +33,8 @@ interface SliderButtonProps {
 
 const SliderCard = ({useButton = false, useDots= false}: SliderCardProps) => {
 
-  const { data: enterprise, isLoading, isFetching, refetch, isError } = useEnterprise();
-
+  // const { data: enterprise, isLoading, isFetching, refetch, isError } = useEnterprise();
+  const { data: enterprise } = useEnterprise();
 function SampleNextArrow(props: SliderButtonProps) {
     const { className, style, onClick } = props;
     return (

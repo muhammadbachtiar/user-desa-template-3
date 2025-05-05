@@ -6,8 +6,8 @@ import sosmedIcons from "../shared/sosmedIcons";
 
 const Footer = () => {
   
-    const { data, isLoading, isFetching, refetch, isError } = useFooter();
-  
+    // const { data, isLoading, isFetching, refetch, isError } = useFooter();
+    const { data } = useFooter();
     return (
        <>
         <footer className="bg-gray-100 border-t-2 border-gray-200 shadow-lg dark:bg-gray-900 px-6 pb-24 md:pb-6 lg:px-0 py-6 w-full">

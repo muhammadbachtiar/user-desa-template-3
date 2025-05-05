@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import Select, { type SingleValue } from "react-select"
 import type { StylesConfig } from "react-select"
 import useCategory from "@/hooks/contents/article/useCategory"
+import { console } from "node:inspector"
 
 type SelectCategoryProps = {
   setCategoryId: React.Dispatch<React.SetStateAction<number>>
@@ -13,11 +14,12 @@ type SelectCategoryProps = {
 const SelectCategory = ({ setCategoryId }: SelectCategoryProps) => {
   const [options, setOptions] = useState<{ value: number; label: string }[]>([])
   const [search, setSearch] = useState("");
+  console.log(search)
   
   const [isMounted, setIsMounted] = useState(false)
 
-  const { data: categories, isLoading, isFetching, refetch, isError } = useCategory()
-
+  // const { data: categories, isLoading, isFetching, refetch, isError } = useCategory()
+  const { data: categories, isLoading } = useCategory()
   const customStyles: StylesConfig<{ value: number; label: string }> = {
     placeholder: (base) => ({
       ...base,

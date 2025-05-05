@@ -9,7 +9,8 @@ import useInformation from "@/hooks/settings/useInformation";
 
 export default function Home() {
 
-const { data: setting, isLoading: isSettingLoading, isFetching: isSettingFetching, refetch: refetchSetting, isError: isSettingError } = useInformation({}, "profile");
+// const { data: setting, isLoading: isSettingLoading, isFetching: isSettingFetching, refetch: refetchSetting, isError: isSettingError } = useInformation({}, "profile");
+const { data: setting } = useInformation({}, "profile");
 
 const backgroundStyle = setting?.value?.imageUrl 
     ? { backgroundImage: `url(${setting.value.imageUrl})` }

@@ -12,8 +12,12 @@ import useInformation from "@/hooks/settings/useInformation";
 export default function Home() {
 const [search, setSearch] = useState('');
 
-const { data: setting, isLoading: isSettingLoading, isFetching: isSettingFetching, refetch: refetchSetting, isError: isSettingError } = useInformation({}, "tour");
-const { data, isLoading, isFetching, refetch, isError } = useTour({"search": search});
+// const { data: setting, isLoading: isSettingLoading, isFetching: isSettingFetching, refetch: refetchSetting, isError: isSettingError } = useInformation({}, "tour");
+// const { data, isLoading, isFetching, refetch, isError } = useTour({"search": search});
+
+const { data: setting } = useInformation({}, "tour");
+const { data, isLoading, isFetching, isError } = useTour({"search": search});
+
 const backgroundStyle = setting?.value?.imageUrl 
     ? { backgroundImage: `url(${setting.value.imageUrl})` }
     : { backgroundColor: '#f3f4f6' };

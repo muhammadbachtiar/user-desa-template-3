@@ -9,9 +9,12 @@ import RichTextContent from "../RichTextContent";
 
 const BasicInformation = () => {
 
-    const { data: sambutan, isLoading, isFetching, refetch, isError } = useStaticPage({}, "sambutan");
-    const { data: program_desa, isLoading: isLoading2, isFetching: isFetchingProgram, refetch: refetchProgram, isError: isErrorProgram } = useStaticPage({}, "program-desa");
+    // const { data: sambutan, isLoading, isFetching, refetch, isError } = useStaticPage({}, "sambutan");
+    // const { data: program_desa, isLoading: isLoading2, isFetching: isFetchingProgram, refetch: refetchProgram, isError: isErrorProgram } = useStaticPage({}, "program-desa");
   
+    const { data: sambutan} = useStaticPage({}, "sambutan");
+    const { data: program_desa} = useStaticPage({}, "program-desa");
+
     return (
         <div className="w-full dark:bg-gray-700 rounded-2xl min-h-[400px] flex flex-col items-start space-y-6">
             <div className="w-full flex flex-col gap-6">

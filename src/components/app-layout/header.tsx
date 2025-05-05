@@ -8,8 +8,8 @@ import { MainNav } from "../navigation/main-nav";
 
 export default function Header() {
 
-    const { data : dataMenu, isLoading, isFetching, refetch, isError } = useMenu();
-
+    // const { data : dataMenu, isLoading, isFetching, refetch, isError } = useMenu();
+    const { data : dataMenu } = useMenu();
     const [searchValue, setSearchValue] = useState('');
     const handleChange = (e: { target: { value: SetStateAction<string>; }; }) => {
         setSearchValue(e.target.value);

@@ -23,7 +23,8 @@ function findMenuItemByPath(items: MenuWithContent, path: string[], currentPath 
 }
 
 export default function DynamicPage({ params }: { params: { slug: string[] } }) {
-  const { data : dataMenu, isLoading: isMenuLoading, isFetching: isMenuFetching, refetch: refetchMenu, isError: isMenuError } = useMenu();
+  const { data : dataMenu } = useMenu();
+  // const { data : dataMenu, isLoading: isMenuLoading, isFetching: isMenuFetching, refetch: refetchMenu, isError: isMenuError } = useMenu();
   const path = params.slug || []
   const menuItem = findMenuItemByPath(dataMenu.value, path)
   
@@ -31,7 +32,8 @@ export default function DynamicPage({ params }: { params: { slug: string[] } }) 
     notFound()
   }
   
-  const { data: staticPage, isLoading, isFetching, refetch, isError } = useStaticPage({}, menuItem.staticPage || "");
+  const { data: staticPage} = useStaticPage({}, menuItem.staticPage || "");
+  // const { data: staticPage, isLoading, isFetching, refetch, isError } = useStaticPage({}, menuItem.staticPage || "");
 
   return (
      <AsideContent>

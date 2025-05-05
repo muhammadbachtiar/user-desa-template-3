@@ -6,7 +6,8 @@ import LightboxImage from "../shared/Lightbox";
 import { useState } from "react";
 
 export default function Infografis({slideToShow = 4}) {
-    const { data, isLoading, isFetching, refetch, isError } = useInfografis();
+    // const { data, isLoading, isFetching, refetch, isError } = useInfografis();
+    const { data } = useInfografis();
     const [isOpen, setIsOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
 

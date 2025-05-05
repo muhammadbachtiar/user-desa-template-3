@@ -13,7 +13,9 @@
   "dependencies": {
     "@balkangraph/orgchart.js": "^8.16.24",
     "@headlessui/react": "^2.2.2",
+    "@n8n/chat": "^0.27.1",
     "@tailwindcss/typography": "^0.5.16",
+    "axios": "^1.9.0",
     "chart.js": "^4.4.9",
     "chartjs-plugin-datalabels": "^2.2.0",
     "flowbite-react": "^0.11.7",
