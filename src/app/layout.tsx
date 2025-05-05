@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Header from "@/components/app-layout/header";
+import Footer from "@/components/app-layout/footer";
 import "./globals.css";
+import LabahasaChatbot from "@/components/labahasa-chatbot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +30,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="min-h-screen min-w-full bg-primary flex flex-col justify-between items-start w-full overflow-x-hidden">
+            <Header/>
+            <div className="flex w-full border-gray-200 justify-center items-center pb-8 mx-auto md:px-14 p-3">
+              <main className="flex w-full flex-col gap-[56px] row-start-2 items-center sm:items-start">
+                {children}
+              </main>
+            </div>
+            <Footer/>
+        </div>
+        <LabahasaChatbot/>
       </body>
     </html>
   );
