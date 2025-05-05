@@ -5,6 +5,12 @@ import RichTextContent from "@/components/RichTextContent"
 import useStaticPage from "@/hooks/contents/useStaticPage"
 import AsideContent from "@/components/app-layout/aside-content"
 
+interface DynamicPageProps {
+  params: {
+    slug?: string[];
+  };
+}
+
 function findMenuItemByPath(items: MenuWithContent, path: string[], currentPath = ""): MenuWithContent[0] | null {
   for (const item of items) {
     const itemPath = item.route ? `${currentPath}${item.route}` : currentPath
@@ -22,7 +28,7 @@ function findMenuItemByPath(items: MenuWithContent, path: string[], currentPath 
   return null
 }
 
-export default function DynamicPage({ params }: { params: { slug: string[] } }) {
+export default function DynamicPage({ params }: DynamicPageProps) {
   const { data : dataMenu } = useMenu();
   // const { data : dataMenu, isLoading: isMenuLoading, isFetching: isMenuFetching, refetch: refetchMenu, isError: isMenuError } = useMenu();
   const path = params.slug || []
