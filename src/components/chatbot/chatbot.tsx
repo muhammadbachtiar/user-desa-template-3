@@ -11,7 +11,7 @@ const Chatbot = () => {
 
 	useEffect(() => {
 		createChat({
-			webhookUrl:   `${process.env.NEXT_PUBLIC_LABAHSA_CHATBOT_BASE_URL}`,
+			webhookUrl: `${process.env.NEXT_PUBLIC_LABAHSA_CHATBOT_BASE_URL}`,
        webhookConfig: {
           method: 'POST',
           headers: {
