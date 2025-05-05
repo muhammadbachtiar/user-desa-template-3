@@ -62,3 +62,10 @@
 	--chat--toggle--color: var(--chat--color-white);
 	--chat--toggle--size: 64px;
   }
+
+  .n8n-chat-launcher {
+    background-image: url('https://static.vecteezy.com/system/resources/previews/010/054/157/non_2x/chat-bot-robot-avatar-in-circle-round-shape-isolated-on-white-background-stock-illustration-ai-technology-futuristic-helper-communication-conversation-concept-in-flat-style-vector.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }

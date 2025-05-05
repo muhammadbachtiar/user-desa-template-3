@@ -52,15 +52,8 @@ import useMenu from "@/hooks/settings/useMenu";
 import RichTextContent from "@/components/RichTextContent";
 import useStaticPage from "@/hooks/contents/useStaticPage";
 import AsideContent from "@/components/app-layout/aside-content";
-import { type NextPage } from "next";
+import { PageProps } from "../../../.next/types/app/page";
 
-type PageProps = {
-  params: {
-    slug: string[];
-  };
-};
-
-// Function to find menu item by path
 function findMenuItemByPath(
   items: MenuWithContent,
   path: string[],
@@ -82,10 +75,14 @@ function findMenuItemByPath(
   return null;
 }
 
-const DynamicPage: NextPage<PageProps> = ({ params }) => {
+interface DynamicPageProps {
+  params: { slug?: string[] };
+}
+
+// Assert that DynamicPageProps satisfies PageProps
+export default function DynamicPage({ params }: DynamicPageProps & PageProps) {
   const { data: dataMenu } = useMenu();
   const path = params.slug || [];
-
   const menuItem = findMenuItemByPath(dataMenu.value, path);
 
   if (!menuItem) {
@@ -96,12 +93,7 @@ const DynamicPage: NextPage<PageProps> = ({ params }) => {
 
   return (
     <AsideContent>
-      <RichTextContent
-        content={staticPage.value.content}
-        className="px-4"
-      />
+      <RichTextContent content={staticPage.value.content} className="px-4" />
     </AsideContent>
   );
-};
-
-export default DynamicPage;
+}
