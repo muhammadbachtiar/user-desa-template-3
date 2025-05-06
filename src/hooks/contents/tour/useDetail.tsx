@@ -15,7 +15,7 @@ function useTourDetail(params: Record<string, string | number> = {}, slug: strin
                       slug: "curup-bali-di-muara-enim",
                       description: "Muara Enim merupakan salah satu kabupaten di Sumatera Selatan (Sumsel). Ada banyak destinasi wisata di Muara Enim yang bisa detikers dikunjungi jika datang ke daerah ini.",
                       thumbnail: "https://sekolahgurupemimpin.s3.ap-southeast-1.amazonaws.com/ckeditor/w9nPZRZjRAZL3DVjCVVkgrMxjYbfpfY5IrQaI0lT.jpg",
-                      latitude: "-4.0592127",
+                      latitude: "-4.05921270",
                       longitude: "103.7668845",
                       address: "Bedegung, Tanjung Agung, Muara Enim Regency, South Sumatra",
                       link: {

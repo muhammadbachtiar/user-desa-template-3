@@ -11,11 +11,17 @@ import { CgMail } from "react-icons/cg";
 import { BiGlobe } from "react-icons/bi";
 import { CiMap } from "react-icons/ci";
 import sosmedIcons from "@/components/shared/sosmedIcons";
+import StreetViewChecker from "@/services/utils/checkStreetView";
 
 const TourDetail = () => {
     const { slug } = useParams();
     const gmapsApiKey = process.env.NEXT_PUBLIC_GMAPS_API_KEY
     const { data: tour, isLoading: isLoadingTour, isFetching: isFetchingTour, refetch: refetchTour, isError: isErrorTour } = useTourDetail({}, String(slug));
+    const isStreetAvailable = StreetViewChecker({lat: Number(tour.value.latitude), lng: Number(tour.value.longitude)});
+    let mapsUrl = `https://www.google.com/maps/embed/v1/place?key=${gmapsApiKey}&q=${tour.value.latitude},${tour.value.longitude}`;
+    if(isStreetAvailable){
+        mapsUrl = `https://www.google.com/maps/embed/v1/streetview?key=${gmapsApiKey}&location=${tour.value.latitude},${tour.value.longitude}&heading=0&pitch=0`
+    }
 
   return (
     <>  
@@ -48,23 +54,25 @@ const TourDetail = () => {
                         <div className="lg:col-span-6 lg:sticky lg:top-0 lg:h-screen">
                             <div className="h-full w-full flex items-start justify-center p-3 lg:p-6">
                                 <div className="relative w-full h-full min-h-[300px] lg:min-h-[500px] rounded-xl overflow-hidden">
-                                    {tour.value.latitude && tour.value.longitude && gmapsApiKey ? (
-                                    <iframe
-                                        src={`https://www.google.com/maps/embed/v1/streetview?key=${gmapsApiKey}&location=${tour.value.latitude},${tour.value.longitude}&heading=0&pitch=0`}
-                                        width="100%"
-                                        height="100%"
-                                        style={{ border: 0 }}
-                                        allowFullScreen
-                                        loading="lazy"
-                                        referrerPolicy="no-referrer-when-downgrade"
-                                        title={`Map of ${tour.value.title}`}
-                                        className="absolute inset-0"
-                                    />
-                                    ) : (
-                                    <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800">
-                                        <p className="text-gray-500 dark:text-gray-400">Map location not available</p>
-                                    </div>
-                                    )}
+                                    {
+                                        !tour.value.latitude && !tour.value.longitude && !gmapsApiKey ? (
+                                            <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+                                                <p className="text-gray-500 dark:text-gray-400">Map location not available</p>
+                                            </div>
+                                        ) : (
+                                            <iframe
+                                                src={mapsUrl}
+                                                width="100%"
+                                                height="100%"
+                                                style={{ border: 0 }}
+                                                allowFullScreen
+                                                loading="lazy"
+                                                referrerPolicy="no-referrer-when-downgrade"
+                                                title={`Map of ${tour.value.title}`}
+                                                className="absolute inset-0"
+                                            />
+                                        )  
+                                    }
                                 </div>
                             </div>
                         </div>

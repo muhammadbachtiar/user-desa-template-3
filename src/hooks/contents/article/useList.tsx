@@ -16,7 +16,7 @@ function useArticle(params: Record<string, string | number> = {} ) {
                             description: "Wtrite down the article content ...",
                             thumbnail: "https://sekolahgurupemimpin.s3.ap-southeast-1.amazonaws.com/ckeditor/Vtwl182T08LudRdtHMKZOHSGK3aABMLWVicYwoeH.jpg",
                             published_at: "2025-04-15",
-                            slug: "asdsa-1",
+                            slug: "selamat-datang-muara-enim-1",
                             user_id: 1,
                             meta: [
                                 {
@@ -48,7 +48,7 @@ function useArticle(params: Record<string, string | number> = {} ) {
                             description: "Wtrite down the article content ...",
                             thumbnail: "https://sekolahgurupemimpin.s3.ap-southeast-1.amazonaws.com/ckeditor/Vtwl182T08LudRdtHMKZOHSGK3aABMLWVicYwoeH.jpg",
                             published_at: "2025-04-15",
-                            slug: "asdsa-1",
+                            slug: "selamat-datang-muara-enim-1",
                             user_id: 1,
                             meta: [
                                 {
@@ -80,7 +80,7 @@ function useArticle(params: Record<string, string | number> = {} ) {
                             description: "Wtrite down the article content ...",
                             thumbnail: "https://sekolahgurupemimpin.s3.ap-southeast-1.amazonaws.com/ckeditor/Vtwl182T08LudRdtHMKZOHSGK3aABMLWVicYwoeH.jpg",
                             published_at: "2025-04-15",
-                            slug: "asdsa-1",
+                            slug: "selamat-datang-muara-enim-1",
                             user_id: 1,
                             meta: [
                                 {
@@ -112,7 +112,7 @@ function useArticle(params: Record<string, string | number> = {} ) {
                             description: "Wtrite down the article content ...",
                             thumbnail: "https://sekolahgurupemimpin.s3.ap-southeast-1.amazonaws.com/ckeditor/Vtwl182T08LudRdtHMKZOHSGK3aABMLWVicYwoeH.jpg",
                             published_at: "2025-04-15",
-                            slug: "asdsa-1",
+                            slug: "selamat-datang-muara-enim-1",
                             user_id: 1,
                             meta: [
                                 {

@@ -1,17 +1,26 @@
-"use client"
-
-import { useParams } from "next/navigation";
 import { Button } from "flowbite-react";
 import { LuRefreshCcw } from "react-icons/lu";
 import useArticleDetail from "@/hooks/contents/article/useDetail";
 import RichTextContent from "@/components/RichTextContent";
 import Image from "next/image";
 import AsideContent from "@/components/app-layout/aside-content";
+import { generateContentMetadata } from "@/services/utils/generate-seo";
+import ArticleService from "@/services/controlers/article/article.service";
+import { Metadata } from "next";
+import { PageProps } from "../../../../.next/types/app/page";
 
-const ArticleDetail = () => {
-    const { slug } = useParams();
+interface DynamicPageProps {
+    params: { slug: string };
+  }
 
-    const { data: article, isLoading: isLoadingArticle, isFetching: isFetchingArticle, refetch: refetchArticle, isError: isErrorArticle } = useArticleDetail({}, String(slug));
+export async function generateMetadata({ params }: DynamicPageProps & PageProps): Promise<Metadata> {
+    const article = await ArticleService.getOne(params.slug, {});
+    return generateContentMetadata({ ...article.data, type: "article" }, { siteName: "Website Desa" });
+  }
+
+const ArticleDetail = ({ params }: DynamicPageProps & PageProps) => {
+
+    const { data: article, isLoading: isLoadingArticle, isFetching: isFetchingArticle, refetch: refetchArticle, isError: isErrorArticle } = useArticleDetail({}, String(params.slug));
 
   return (
     <>  

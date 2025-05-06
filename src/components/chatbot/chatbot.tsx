@@ -1,42 +1,68 @@
-'use client';
+"use client"
 
-import { useEffect } from 'react';
-import '@n8n/chat/style.css';
-import './chatbot.css'
-import { createChat } from '@n8n/chat';
+import { useEffect } from "react"
+import "@n8n/chat/style.css"
+import "./chatbot.css"
+import { createChat } from "@n8n/chat"
 
 const Chatbot = () => {
+  const base64 = btoa(
+    `${process.env.NEXT_PUBLIC_LABAHSA_CHATBOT_USERNAME}:${process.env.NEXT_PUBLIC_LABAHSA_CHATBOT_PASSWORD}`,
+  )
 
-  const base64 = btoa(`${process.env.NEXT_PUBLIC_LABAHSA_CHATBOT_USERNAME}:${process.env.NEXT_PUBLIC_LABAHSA_CHATBOT_PASSWORD}`);
-
-	useEffect(() => {
-		createChat({
-			webhookUrl: `${process.env.NEXT_PUBLIC_LABAHSA_CHATBOT_BASE_URL}`,
-       webhookConfig: {
-          method: 'POST',
-          headers: {
-          'Authorization': `Basic ${base64}`,
-          'Content-Type': 'application/json',
-        }
-		},
-    initialMessages: [
-      'Hi, Nama saya Aruna. Ada yang bisa saya bantu?',
-    ],
-    i18n: {
-      en: {
-        title: 'Chatbot',
-        subtitle: '',
-        footer: '',
-        getStarted: 'New Conversation',
-        inputPlaceholder: 'Type your question..',
-        closeButtonTooltip: ''
+  useEffect(() => {
+    createChat({
+      webhookUrl: `${process.env.NEXT_PUBLIC_LABAHSA_CHATBOT_BASE_URL}`,
+      webhookConfig: {
+        method: "POST",
+        headers: {
+          Authorization: `Basic ${base64}`,
+          "Content-Type": "application/json",
+        },
       },
-    },
-    }
-  );
-	}, [base64]);
+      initialMessages: ["Hi, saya Aruna. Ada yang bisa saya bantu?"],
+      i18n: {
+        en: {
+          title: "Aruna",
+          subtitle: "",
+          footer: "",
+          getStarted: "Percakapan baru",
+          inputPlaceholder: "Ketik pertanyaan anda disini...",
+          closeButtonTooltip: "",
+        },
+      },
+    })
 
-	return (<div></div>);
-};
+    setTimeout(() => {
+      const chatHeading = document.querySelector(".chat-heading")
+      if (chatHeading) {
+        chatHeading.innerHTML = ""
+
+        const profileImg = document.createElement("img")
+        profileImg.src = "/images/aruna-profile.png"
+        profileImg.alt = "Aruna"
+        profileImg.className = "chat-profile-img"
+
+        const title = document.createElement("div")
+        title.className = "chat-title-container"
+
+        const h1 = document.createElement("h1")
+        h1.textContent = "Aruna"
+
+        const subtitle = document.createElement("p")
+        subtitle.className = "chat-subtitle"
+        subtitle.textContent = "Asisten AI"
+
+        title.appendChild(h1)
+        title.appendChild(subtitle)
+
+        chatHeading.appendChild(profileImg)
+        chatHeading.appendChild(title)
+      }
+    }, 500) 
+  }, [base64])
+
+  return <div></div>
+}
 
 export default Chatbot

@@ -79,7 +79,6 @@ interface DynamicPageProps {
   params: { slug?: string[] };
 }
 
-// Assert that DynamicPageProps satisfies PageProps
 export default function DynamicPage({ params }: DynamicPageProps & PageProps) {
   const { data: dataMenu } = useMenu();
   const path = params.slug || [];
