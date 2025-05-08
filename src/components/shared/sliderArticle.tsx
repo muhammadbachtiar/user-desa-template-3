@@ -5,19 +5,8 @@ import PropTypes from "prop-types";
 import ArticleCard from "./articleCard";
 import { CSSProperties } from "react"
 import useArticle from "@/hooks/contents/article/useList";
-
-interface Article {
-    id: number;
-    category_id: number;
-    title: string;
-    description: string;
-    thumbnail: string;
-    published_at: string; 
-    slug: string;
-    user_id: number;
-    category: {name: string}
-    views: number;
-  }
+import { ArticleData } from "@/services/controlers/article/type";
+import Refetch from '../shared/refetch';
 
 interface SliderCardProps {
     useButton?: boolean;
@@ -31,9 +20,13 @@ interface SliderButtonProps {
   }
 
 const SliderCard = ({useButton = false, useDots= false}: SliderCardProps) => {
+  let isInfinite = false
+  const { data: articles, isLoading, isFetching, refetch, isError } = useArticle({"page_size": 6});
+  
+  if(!isLoading && !isFetching && !isError){
+    isInfinite = (articles?.pages?.[0]?.data?.length ?? 0) > 1
+  }
 
-  // const { data: articles, isLoading, isFetching, refetch, isError } = useArticle();
-  const { data: articles } = useArticle();
 function SampleNextArrow(props: SliderButtonProps) {
     const { className, style, onClick } = props;
     return (
@@ -58,7 +51,7 @@ function SamplePrevArrow(props: SliderButtonProps) {
     
 const settings = {
     dots: true,
-    infinite: articles.value.length > 1,
+    infinite: isInfinite,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 4,
@@ -124,12 +117,30 @@ SampleNextArrow.propTypes = {
 return (
         <div>
             <Slider {...settings}>
-            {articles.value.map((card: Article) => 
-              <div tabIndex={1} key={card.slug}>
-                  <ArticleCard thumbnail={card.thumbnail} slug={card.slug} title={card.title} description={card.description} category_name={card.category.name} published_at={card.published_at} /> 
-              </div>    
-            )}
-          </Slider>
+               {
+                isLoading ? (
+                  Array.from({ length: 4 }).map((_, index) => (
+                    <div key={index} className="flex px-3 animate-pulse w-full">
+                      <div className="h-64 w-full flex-1 rounded-2xl bg-gray-200"></div>
+                    </div>
+                ))
+                ) : isError && !isFetching && !articles || !articles?.pages ? (
+                    <div className="flex min-h-52 mb-4 justify-center col-span-8 w-full">
+                      <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
+                    </div>
+                ) : isError && !isFetching  ? (
+                    <div className="flex min-h-52 justify-center items-center mb-4 col-span-8 w-full">
+                      <Refetch  refetch={refetch} />
+                    </div>
+                ) : (
+                    articles?.pages[0].data.map((card: ArticleData) => 
+                      <div tabIndex={1} key={card.slug}>
+                          <ArticleCard thumbnail={card.thumbnail} slug={card.slug} title={card.title} description={card.description} category_name={card.category.name} published_at={card.published_at} /> 
+                      </div>    
+                    )
+                )
+               }
+            </Slider>
         </div>
       )
 }

@@ -13,12 +13,11 @@ type SelectCategoryProps = {
 const SelectCategory = ({ setCategoryId }: SelectCategoryProps) => {
   const [options, setOptions] = useState<{ value: number; label: string }[]>([])
   const [search, setSearch] = useState("");
-  console.log(search)
   
   const [isMounted, setIsMounted] = useState(false)
-
-  // const { data: categories, isLoading, isFetching, refetch, isError } = useCategory()
-  const { data: categories, isLoading } = useCategory()
+  
+  const { data: categories, isLoading } = useCategory({'search': search})
+  
   const customStyles: StylesConfig<{ value: number; label: string }> = {
     placeholder: (base) => ({
       ...base,
@@ -50,12 +49,12 @@ const SelectCategory = ({ setCategoryId }: SelectCategoryProps) => {
   }
 
   useEffect(() => {
-    if (!categories?.value || !Array.isArray(categories.value)) {
+    if (!categories || !Array.isArray(categories)) {
       return
     }
 
     setOptions((prevOptions) => {
-      const newOptions = categories.value.map((item) => ({
+      const newOptions = categories.map((item) => ({
         value: item.id,
         label: item.name,
       }))
@@ -66,14 +65,12 @@ const SelectCategory = ({ setCategoryId }: SelectCategoryProps) => {
 
       return newOptions
     })
-  }, [categories?.value])
+  }, [categories])
 
-  // Add useEffect to set mounted state after component mounts on client
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  // Return null during server-side rendering or initial client render
   if (!isMounted) {
     return null
   }

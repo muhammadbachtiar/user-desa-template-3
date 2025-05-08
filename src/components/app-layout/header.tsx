@@ -2,24 +2,47 @@
 import { SetStateAction, useState } from "react";
 import Logo from "../shared/logo";
 import Link from "next/link";
-import useMenu from "@/hooks/settings/useMenu";
 import { MainNav } from "../navigation/main-nav";
+import useSetting from "@/hooks/settings/useSettings";
+import Refetch from "../shared/refetch";
 
 
 export default function Header() {
 
-    // const { data : dataMenu, isLoading, isFetching, refetch, isError } = useMenu();
-    const { data : dataMenu } = useMenu();
+    const { data: menu, isLoading, refetch, isFetching, isError } = useSetting('menu', {});
+
     const [searchValue, setSearchValue] = useState('');
     const handleChange = (e: { target: { value: SetStateAction<string>; }; }) => {
         setSearchValue(e.target.value);
     };
-
+    
   return (
     <nav className="bg-white border-b-2 px-4 border-gray-300 flex items-center justify-between dark:bg-gray-900 w-full z-20 top-0 start-0 py-2 gap-y-2">
         <div className="max-w-screen flex flex-wrap items-center justify-between w-full gap-y-2">
             <Logo/>
-            <MainNav menuData={dataMenu.value} />
+            {   
+                isLoading ? (
+                    <div className="flex animate-pulse space-x-3">
+                        <div className="hidden md:flex flex-row gap-x-6">
+                            <div className=" h-4 w-24 rounded bg-gray-200"></div>
+                            <div className="h-4 w-24 rounded bg-gray-200"></div>
+                            <div className="h-4 w-24 rounded bg-gray-200"></div>
+                            <div className="h-4 w-24 rounded bg-gray-200"></div>
+                        </div>
+                        <div className="flex md:hidden flex-row gap-x-6">
+                            <div className="h-10 w-10 rounded-2xl bg-gray-200"></div>
+                        </div>
+                    </div>
+                ) : isError && !isFetching && !menu || menu.value?.length === 0 ? (
+                    <div className="flex flex-col items-center justify-top gap-2">
+                        <p className="text-black text-md dark:text-gray-400">Data tidak tersedia</p>
+                    </div>
+                ) : isError && !isFetching  ? (
+                    <Refetch refetch={refetch} />
+                ) : (
+                    <MainNav menuData={menu.value} />
+                )
+            }
             <div className="items-center justify-between w-full flex lg:w-2xs md:order-3" id="navbar-sticky">
                 <div className="relative w-full">
                     <input onChange={handleChange} id="search-dropdown" className="block p-2 w-full z-20 text-sm text-gray-900 bg-gray-200 rounded-e-xl rounded-s-xl border-s-2 border border-gray-300 dark:bg-gray-700 dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="Apa yang Anda cari?" required />

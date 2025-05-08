@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 interface Props {
-    thumbnail: string; 
+    thumbnail: string | null; 
     title: string;
     slug: string;
     category_name: string;
-    published_at: string;
+    published_at: string | null;
     description: string;
   }
 

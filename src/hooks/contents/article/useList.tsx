@@ -1,155 +1,45 @@
-function useArticle(params: Record<string, string | number> = {} ) {
+import ArticleService from "@/services/controlers/article/article.service";
+import { ListArticle } from "@/services/controlers/article/type";
+import { useInfiniteQuery } from "@tanstack/react-query";
+
+function useArticle(params: Record<string, string | number> = {}, categoryId: number = 0 ) {
     const {
-        data: app,
+        data,
         isLoading,
         isError,
+        fetchNextPage,
+        hasNextPage,
         isFetching,
         refetch,
-      } = { 
-        data: { 
-                data: {
-                    value:[
-                        {
-                            id: 28,
-                            category_id: 11,
-                            title: "asdsa",
-                            description: "Wtrite down the article content ...",
-                            thumbnail: "https://sekolahgurupemimpin.s3.ap-southeast-1.amazonaws.com/ckeditor/Vtwl182T08LudRdtHMKZOHSGK3aABMLWVicYwoeH.jpg",
-                            published_at: "2025-04-15",
-                            slug: "selamat-datang-muara-enim-1",
-                            user_id: 1,
-                            meta: [
-                                {
-                                    key: "title",
-                                    value: "asdsa"
-                                },
-                                {
-                                    key: "description",
-                                    value: "asdsaasdsa"
-                                },
-                                {
-                                    key: "keywords",
-                                    value: [
-                                        "keyowrds 1",
-                                        "keywords 2"
-                                    ]
-                                }
-                            ],
-                            views: 8,
-                            category: {
-                                id: 11,
-                                name: "Bisnis"
-                            }
-                        },
-                        {
-                            id: 29,
-                            category_id: 11,
-                            title: "asdsa",
-                            description: "Wtrite down the article content ...",
-                            thumbnail: "https://sekolahgurupemimpin.s3.ap-southeast-1.amazonaws.com/ckeditor/Vtwl182T08LudRdtHMKZOHSGK3aABMLWVicYwoeH.jpg",
-                            published_at: "2025-04-15",
-                            slug: "selamat-datang-muara-enim-1",
-                            user_id: 1,
-                            meta: [
-                                {
-                                    key: "title",
-                                    value: "asdsa"
-                                },
-                                {
-                                    key: "description",
-                                    value: "asdsaasdsa"
-                                },
-                                {
-                                    key: "keywords",
-                                    value: [
-                                        "keyowrds 1",
-                                        "keywords 2"
-                                    ]
-                                }
-                            ],
-                            views: 8,
-                            category: {
-                                id: 11,
-                                name: "Bisnis"
-                            }
-                        },
-                         {
-                            id: 30,
-                            category_id: 11,
-                            title: "asdsa",
-                            description: "Wtrite down the article content ...",
-                            thumbnail: "https://sekolahgurupemimpin.s3.ap-southeast-1.amazonaws.com/ckeditor/Vtwl182T08LudRdtHMKZOHSGK3aABMLWVicYwoeH.jpg",
-                            published_at: "2025-04-15",
-                            slug: "selamat-datang-muara-enim-1",
-                            user_id: 1,
-                            meta: [
-                                {
-                                    key: "title",
-                                    value: "asdsa"
-                                },
-                                {
-                                    key: "description",
-                                    value: "asdsaasdsa"
-                                },
-                                {
-                                    key: "keywords",
-                                    value: [
-                                        "keyowrds 1",
-                                        "keywords 2"
-                                    ]
-                                }
-                            ],
-                            views: 8,
-                            category: {
-                                id: 11,
-                                name: "Bisnis"
-                            }
-                        },
-                        {
-                            id: 31,
-                            category_id: 11,
-                            title: "asdsa",
-                            description: "Wtrite down the article content ...",
-                            thumbnail: "https://sekolahgurupemimpin.s3.ap-southeast-1.amazonaws.com/ckeditor/Vtwl182T08LudRdtHMKZOHSGK3aABMLWVicYwoeH.jpg",
-                            published_at: "2025-04-15",
-                            slug: "selamat-datang-muara-enim-1",
-                            user_id: 1,
-                            meta: [
-                                {
-                                    key: "title",
-                                    value: "asdsa"
-                                },
-                                {
-                                    key: "description",
-                                    value: "asdsaasdsa"
-                                },
-                                {
-                                    key: "keywords",
-                                    value: [
-                                        "keyowrds 1",
-                                        "keywords 2"
-                                    ]
-                                }
-                            ],
-                            views: 8,
-                            category: {
-                                id: 11,
-                                name: "Bisnis"
-                            }
-                        },
-                    ]
+      } = useInfiniteQuery<ListArticle, Error>({
+        initialPageParam: null,
+        queryKey: ["articles", categoryId, params],
+        queryFn: async ({ pageParam = null }) => {
+          return await ArticleService.getAll(
+                { 
+                    with:"category", 
+                    ...(categoryId !== 0 && { category: categoryId }),
+                    ...params,
+                    cursor: pageParam
                 }
-              },
-        isLoading: false,
-        isError: false,
-        isFetching: false,
-        refetch: () => console.log(`"Refetching data..." ${params}`),
-      };
+            );
+        },
+        getNextPageParam: (lastPage) => {
+            if (!lastPage.meta.next_page_url) {
+                return undefined;
+            }
+            const url = new URL(lastPage.meta.next_page_url);
+            const cursor = url.searchParams.get("cursor");
+            return cursor ?? undefined;
+        }
+      })
 
     return {
-      data: app?.data,
+      data,
       isLoading,
       isFetching,
+      hasNextPage,
+      fetchNextPage,
       refetch,
       isError,
     };

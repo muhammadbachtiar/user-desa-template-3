@@ -4,12 +4,13 @@ import type React from "react"
 import useArticle from "@/hooks/contents/article/useList";
 import Image from "next/image";
 import Infografis from "../section/infografis";
+import Link from "next/link";
+import Refetch from "../shared/refetch";
 
 
 export default function AsideContent({ children }: { children: React.ReactNode}) {
 
-    // const { data: articles, isLoading: isArticlesLoading, isFetching: isArticlesFetching, refetch: refetchArticles, isError: isArticlesError } = useArticle();
-    const { data: articles} = useArticle();
+    const { data: articles, isLoading, isFetching, refetch, isError} = useArticle({"page_size": 4});
 
   return (
     <div className="flex flex-col md:flex-row w-full">
@@ -25,24 +26,51 @@ export default function AsideContent({ children }: { children: React.ReactNode})
           <div>
             <h2 className="text-xl font-bold text-blue-500 mb-4 pb-2 border-gray-300 border-b">Artikel Populer</h2>
             <ul className="space-y-4">
-              {articles.value.map((news) => (
-                <li key={news.id} className="flex">
-                  <div className="mr-3 relative w-fit group mb-6">
-                        <Image
-                            className="w-40 md:w-30 rounded-sm shadow-lg object-cover"
-                            src="https://www.trendwisata.com/wp-content/uploads/2023/05/1fdc0f893412ce55f0d2811821b84d3b-177.jpg"
-                            alt="Article Thumbnail"
-                            width={1200}
-                            height={720}
-                            priority 
-                        />
-                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out" />
+              {
+                isLoading ? (
+                  Array.from({ length: 4 }).map((_, index) => (
+                    <li key={index} className="flex animate-pulse">
+                      <div className="mr-3 min-w-32 relative group mb-3">
+                        <div className="w-40 md:w-30 rounded-sm shadow-lg bg-gray-200 h-20"></div>
+                        <div className="absolute w-40 md:w-30 inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out" />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <div className="h-4 w-32 bg-gray-200 rounded"></div>
+                        <div className="h-4 w-40 bg-gray-200 rounded"></div>
+                      </div>
+                    </li>
+                ))
+                ) : isError && !isFetching && !articles || !articles?.pages ? (
+                    <div className="flex min-h-52 mb-4 justify-center col-span-8 w-full">
+                      <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
                     </div>
-                  <a href="#" className="hover:text-blue-500 font-medium">
-                    {news.title}
-                  </a>
-                </li>
-              ))}
+                ) : isError && !isFetching  ? (
+                    <div className="flex min-h-52 justify-center items-center mb-4 col-span-8 w-full">
+                      <Refetch  refetch={refetch} />
+                    </div>
+                ) : (
+                  articles?.pages[0].data.map((article) => (
+                    <Link key={article.id} href={`/article/${article.slug}`}>
+                      <li className="flex">
+                        <div className="mr-3 min-w-32 relative group mb-3">
+                            <Image
+                                className="w-40 md:w-30 rounded-sm shadow-lg object-cover"
+                                src={article.thumbnail || ""}
+                                alt="Article Thumbnail"
+                                width={1200}
+                                height={720}
+                                priority 
+                                />
+                            <div className="absolute w-40 md:w-30 inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out" />
+                        </div>
+                        <h5 className="text-md font-semibold hover:text-blue-500 ">
+                          {article.title}
+                        </h5>
+                      </li>
+                    </Link>
+                  ))
+                )
+               }
             </ul>
           </div>
           <div>

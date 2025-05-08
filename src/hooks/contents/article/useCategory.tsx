@@ -1,28 +1,20 @@
-function useCategory() {
+import { CategoryData } from "@/services/controlers/article/type";
+import CategoryService from "@/services/controlers/category/category.service";
+import { useQuery } from "@tanstack/react-query";
+
+function useCategory(params: Record<string, string | number> = {}) {
     const {
         data,
         isLoading,
         isError,
         isFetching,
         refetch,
-      } = { 
-        data: { 
-                data: {
-                    value:[
-                        {id: 1, name: "Olahraga"},
-                        {id: 2, name: "Bisnis"},
-                        {id: 3, name: "Politik"},
-                        {id: 4, name: "Teknologi"},
-                        {id: 5, name: "Fashion"},
-                        {id: 6, name: "Developer"}
-                    ]
-                }
-              },
-        isLoading: false,
-        isError: false,
-        isFetching: false,
-        refetch: () => console.log("Refetching data..."),
-      };
+      } = useQuery<{data: CategoryData[]}>({
+        queryKey: ["category", params],
+        queryFn: async () => {
+          return await CategoryService.getAll(params)
+        },
+      });
 
     return {
       data: data?.data,

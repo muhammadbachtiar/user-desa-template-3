@@ -3,8 +3,11 @@
 import Slider from "react-slick";
 import PropTypes from "prop-types";
 import Image from "next/image";
-import { CSSProperties } from "react"
+import { CSSProperties, useState } from "react"
 import React from "react";
+import LightboxImage from "./Lightbox";
+import useInfografis from "@/hooks/contents/useInfografis";
+import Refetch from "./refetch";
 
 interface Infografis {
     id: number;
@@ -17,10 +20,8 @@ interface Infografis {
   }
 
 interface SliderCardProps {
-    data: Infografis[]; 
     useButton?: boolean;
     useDots?: boolean; 
-    onClickHandler: (index:number) => void ;
     slideToShow: number
   }
 
@@ -30,10 +31,14 @@ interface SliderButtonProps {
     onClick?: () => void;
   }
 
-const SliderCard = ({data, useButton = false, useDots= false, onClickHandler, slideToShow = 4}: SliderCardProps) => {
-
+const SliderCard = ({useButton = false, useDots= false, slideToShow = 4}: SliderCardProps) => {
+  const { data, isLoading, isFetching, refetch, isError } = useInfografis();
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
 function SampleNextArrow(props: SliderButtonProps) {
     const { className, style, onClick } = props;
+    
     return (
         <div
         className={className}
@@ -54,52 +59,51 @@ function SamplePrevArrow(props: SliderButtonProps) {
       );
 }  
     
-let settings = {};
-let height = '';
+let settings, height : string;
+  
+settings = {
+  dots: true,
+  infinite: false,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  initialSlide: 0,
+  autoplay: true,
+  autoplaySpeed: 5000,
+  pauseOnHover: true,
+  nextArrow: !useButton ? <SampleNextArrow /> : undefined,
+  prevArrow: !useButton ? <SamplePrevArrow /> : undefined,
+  ...(useDots && {
+      appendDots: (dots: React.ReactNode) => (
+        <div
+          style={{
+            position: 'unset',
+            padding: "0 10px"
+          }}
+        >
+          <ul style={{ margin: "0px" }}>{dots}</ul>
+        </div>
+      )
+    }
+  )
+};
+height = "50vh"
 
-if(slideToShow === 1){
+if(slideToShow > 1){
   settings = {
-    dots: true,
-    infinite: data.length > 1,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    initialSlide: 0,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    pauseOnHover: true,
-    nextArrow: !useButton ? <SampleNextArrow /> : undefined,
-    prevArrow: !useButton ? <SamplePrevArrow /> : undefined,
-    ...(useDots && {
-        appendDots: (dots: React.ReactNode) => (
-          <div
-            style={{
-              position: 'unset',
-              padding: "0 10px"
-            }}
-          >
-            <ul style={{ margin: "0px" }}>{dots}</ul>
-          </div>
-        )
-      }
-    )
-  };
-  height = "50vh"
-} else {
-  settings = {
-    dots: true,
-    infinite: data.length > 1,
+    dots: false,
+    infinite: false,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 3,
-    initialSlide: 0,
+    initialSlide: 3,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
-          infinite: true,
+          infinite: false,
           dots: true
         }
       },
@@ -154,37 +158,54 @@ SampleNextArrow.propTypes = {
 };
   
 return (
-        <div>
+        <div className="w-full">
             <Slider {...settings}>
-            {data.map((card: Infografis, index:number) => {
-              return (
-                <div tabIndex={1} key={card.slug} onClick={()=> {onClickHandler(index)}}>
-                  <div className="relative px-2 group hover:scale-100 focus:scale-100 transition duration-300 ease-in-out"> 
-                      <div className="relative flex justify-center overflow-hidden w-full h-full group rounded-2xl">
-                        {card.link && 
-                          <Image
-                          className="h-full w-full md:min-h-96 object-cover transform group-hover:scale-110 group-focus:scale-110 transition duration-300 ease-in-out"
-                          src={card.link}
-                          alt="Tour Banner"
-                          width={500}
-                          height={300}
-                          style={{
-                              width: "auto",
-                              height: height,
-                          }}
-                          />}
-                      </div>
-                      <div className="flex flex-col gap-2 px-2 mt-2 w-full h-full text-start items-end"> 
-                        <h5 className="text-lg text-start font-bold w-full mx-2 tracking-tighter text-gray-700 dark:text-white">{card.title}</h5>
-                        <p className="text-sm text-start font-semibold w-full mx-2 tracking-tighter text-gray-600 dark:text-white line-clamp-3">{card.description}</p>
-                      </div>
-                  </div>
-              </div>  
-              )
-            }
-               
-            )}
+              {
+                isLoading ? (
+                  Array.from({ length: 4 }).map((_, index) => (
+                    <div key={index} className="relative px-3 animate-pulse">
+                      <div className="min-h-96 w-80 flex-1 rounded-2xl bg-gray-200"></div>
+                    </div>
+                ))
+                ) : isError && !isFetching && !data || data.length === 0 ? (
+                    <div className="flex min-h-52 mb-4 justify-center col-span-8 w-full">
+                      <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
+                    </div>
+                ) : isError && !isFetching  ? (
+                    <div className="flex min-h-52 justify-center items-center mb-4 col-span-8 w-full">
+                      <Refetch  refetch={refetch} />
+                    </div>
+                ) : (
+                  data.map((card: Infografis, index:number) => {
+                      return (
+                        <div key={card.slug} tabIndex={1}  onClick={()=> {setIsOpen(true); setCurrentIndex(index)}}>
+                          <div className="relative px-2 group hover:scale-100 focus:scale-100 transition duration-300 ease-in-out"> 
+                              <div className="relative flex justify-center overflow-hidden w-full h-full group rounded-2xl">
+                                <Image
+                                    className="h-full w-full min-w-full md:min-h-96 object-cover transform group-hover:scale-110 group-focus:scale-110 transition duration-300 ease-in-out"
+                                    src={card.link?.startsWith("https:/") ?  card.link : '/images/not-fuound-image.jpg'}
+                                    alt="Tour Banner"
+                                    width={500}
+                                    height={300}
+                                    style={{
+                                      width: "auto",
+                                      height: height,
+                                    }}
+                                  />
+                              </div>
+                              <div className="flex flex-col gap-2 px-2 mt-2 w-full h-full text-start items-end"> 
+                                <h5 className="text-lg text-start font-bold w-full mx-2 tracking-tighter text-gray-700 dark:text-white">{card.title}</h5>
+                                <p className="text-sm text-start font-semibold w-full mx-2 tracking-tighter text-gray-600 dark:text-white line-clamp-3">{card.description}</p>
+                              </div>
+                          </div>
+                        </div>
+                      )
+                    }
+                  )
+                )
+               }
           </Slider>
+          <LightboxImage data={data} isOpen={isOpen} currentIndex={currentIndex} setIsOpen={setIsOpen} />
         </div>
       )
 }
