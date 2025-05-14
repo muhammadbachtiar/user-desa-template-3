@@ -1,19 +1,5 @@
-export type CategoryData =  {
-    id: number,
-    name: string,
-    description: string,
-    created_at: string,
-    updated_at: string
-}
-
-export type Meta = {
-  next_page_url: string | null,
-  prev_page_url: string | null,
-  total: number,
-  per_page: number,
-  current_page: number,
-  last_page: number
-}
+import { Meta } from "@/types/meta";
+import { CategoryData } from "../category/type";
 
 export type ArticleData = {
     id: number;

@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, TooltipItem, ChartOptions } from "chart.js"
 import { Doughnut, Bar } from "react-chartjs-2"
-import HeadingBadge from "../shared/headingBadge";
+import HeadingBadge from "@/components/shared/headingBadge"
 import { BsBarChartFill } from "react-icons/bs";
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 

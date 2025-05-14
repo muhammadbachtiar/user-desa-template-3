@@ -1,31 +1,35 @@
-import { Suspense } from "react"
 import type { Metadata } from "next"
 import ArticleService from "@/services/controlers/article/article.service"
-import { generateContentMetadata } from "@/services/utils/generate-seo"
-import ArticleDetailSkeleton from "@/components/modul/article/skeleton"
+import { formatMetadata } from "@/services/utils/generate-seo"
 import ArticleDetailClient from "@/components/modul/article/detail"
+import { PageProps } from "../../../../.next/types/app/article/[slug]/page"
+import { ArticleData } from "@/services/controlers/article/type"
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+interface DynamicPageProps {
+  params: { slug?: string };
+}
+
+let article: ArticleData;
+
+export async function generateMetadata({ params }: DynamicPageProps & PageProps): Promise<Metadata> {
 
   try {
-    const articleResponse = await ArticleService.getOne(params.slug, {})
-    const article = articleResponse.data
+    const articleResponse = await ArticleService.getOne(params.slug || '', { with: "user,category" })
+     article = articleResponse.data
 
-    return generateContentMetadata({ ...article, type: "article" }, { siteName: "Website Desa" })
+    return formatMetadata({ ...article, type: "article" }, { siteName: "Website Desa" })
   } catch {
     return {
-      title: "Article | Website Desa",
-      description: "Read our latest articles",
+      title: "Artikel | Website Desa",
+      description: "Baca artikel terbaru kami",
     }
   }
 }
 
-export default function ArticleDetailPage({ params }: { params: { slug: string } }) {
+export default function ArticleDetailPage({ params }: DynamicPageProps & PageProps) {
   return (
     <div className="min-h-screen w-full">
-      <Suspense fallback={<ArticleDetailSkeleton />}>
-        <ArticleDetailClient slug={params.slug} />
-      </Suspense>
+      <ArticleDetailClient slug={params.slug || ''} initialData={article}  />
     </div>
   )
 }

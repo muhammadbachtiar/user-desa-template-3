@@ -1,19 +1,17 @@
 'use client'
 import { FaHome, FaMailBulk } from "react-icons/fa";
 import { FaBuilding, FaGlobe, FaMapPin, FaPhone } from "react-icons/fa6";
-import HeadingBadge from "../shared/headingBadge";
+import HeadingBadge from "../../shared/headingBadge";
 import Image from "next/image";
-import useStaticPage from "@/hooks/contents/useStaticPage";
-import RichTextContent from "../RichTextContent";
+import useStaticPage from "@/hooks/settings/useStaticPage";
+import RichTextContent from "../../shared/RichTextContent";
+import Refetch from "../../shared/refetch";
 
 
 const BasicInformation = () => {
-
-    // const { data: sambutan, isLoading, isFetching, refetch, isError } = useStaticPage({}, "sambutan");
-    // const { data: program_desa, isLoading: isLoading2, isFetching: isFetchingProgram, refetch: refetchProgram, isError: isErrorProgram } = useStaticPage({}, "program-desa");
   
-    const { data: sambutan} = useStaticPage({}, "sambutan");
-    const { data: program_desa} = useStaticPage({}, "program-desa");
+   const { data: welcomeMessage, isLoading: isWellcomeMessageLoading, isFetching: isWellcomeMessageFetching, refetch: refetchWelcomeMessage, isError: isWellcomeMessageError } = useStaticPage({}, "wellcome-message");
+    const { data: villageProgram, isLoading: isvillageProgramLoading, isFetching: isvillageProgramFetching, refetch: refetchVillageProgram, isError: isvillageProgramError } = useStaticPage({}, "village-program");
 
     return (
         <div className="w-full dark:bg-gray-700 rounded-2xl min-h-[400px] flex flex-col items-start space-y-6">
@@ -184,8 +182,8 @@ const BasicInformation = () => {
                         <div className="flex-shrink-0">
                         <Image
                             className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover group-hover:shadow-xl group-hover:scale-105 transition-all duration-300 ease-in-out"
-                            src={sambutan.value.profile?.imageUrl || 'https://via.placeholder.com/150'}
-                            alt={`${sambutan.value.profile?.name}'s photo`}
+                            src={welcomeMessage.value.profile?.imageUrl || 'https://via.placeholder.com/150'}
+                            alt={`${welcomeMessage.value.profile?.name}'s photo`}
                             width={160}
                             height={160} 
                             sizes="(max-width: 768px) 128px, 160px"
@@ -194,20 +192,34 @@ const BasicInformation = () => {
                         </div>
                         <div className="flex flex-col justify-center text-center md:text-left">
                         <h3 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
-                            {sambutan.value.profile?.name}
+                            {welcomeMessage.value.profile?.name}
                         </h3>
                         <p className="text-lg font-medium text-blue-600 dark:text-blue-300 mt-1">
-                            {sambutan.value.profile?.jabatan}
+                            {welcomeMessage.value.profile?.jabatan}
                         </p>
                         <p className="text-base text-gray-500 dark:text-gray-400 mt-2 italic">
-                            {sambutan.value.profile?.years}
+                            {welcomeMessage.value.profile?.years}
                         </p>
                         </div>
                     </div>
-                    <RichTextContent 
-                        content={sambutan.value.content} 
-                        className="px-4 md:px-16" 
-                    />
+                    {isWellcomeMessageLoading ? (
+                        <></>
+                    ) : isvillageProgramError && !isWellcomeMessageFetching && !villageProgram || !villageProgram ? (
+                        <div className="flex col-span-6 w-full min-h-[400px] justify-center">
+                            <div className="flex flex-col items-center justify-center gap-2">
+                                <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+                            </div>
+                        </div>
+                    ) : isvillageProgramError && !isWellcomeMessageFetching  ? (
+                        <div className="flex col-span-6 w-full min-h-[400px] justify-center">
+                          <Refetch refetch={refetchWelcomeMessage} />
+                        </div>
+                    ) : (
+                        <RichTextContent 
+                            content={welcomeMessage.value.content} 
+                            className="px-4 md:px-16" 
+                        />
+                    )}
                 </div>
             </div>
             <div>
@@ -215,10 +227,24 @@ const BasicInformation = () => {
                     <HeadingBadge title="Program Kerja"/>
                 </div>
                 <div className="bg-gray-50 dark:bg-gray-700 rounded-2xl min-h-[400px] flex flex-col py-4 items-center space-y-6">
-                    <RichTextContent 
-                        content={program_desa.value.content} 
-                        className="px-4 md:px-16" 
-                    />
+                {isvillageProgramLoading ? (
+                         <></>
+                    ) : isWellcomeMessageError && !isvillageProgramFetching && !welcomeMessage || !welcomeMessage? (
+                        <div className="flex col-span-6 w-full min-h-[400px] justify-center">
+                            <div className="flex flex-col items-center justify-center gap-2">
+                                <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+                            </div>
+                        </div>
+                    ) : isWellcomeMessageError && !isvillageProgramFetching  ? (
+                        <div className="flex col-span-6 w-full min-h-[400px] justify-center">
+                          <Refetch refetch={refetchVillageProgram} />
+                        </div>
+                    ) : (
+                        <RichTextContent 
+                            content={villageProgram.value.content} 
+                            className="px-4 md:px-16" 
+                        />
+                    )}
                 </div>
             </div>
         </div>

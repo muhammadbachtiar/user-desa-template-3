@@ -1,23 +1,41 @@
 "use client"
 
 import useArticleDetail from "@/hooks/contents/article/useDetail"
-import RichTextContent from "@/components/RichTextContent"
+import RichTextContent from "@/components/shared/RichTextContent"
 import Image from "next/image"
 import AsideContent from "@/components/app-layout/aside-content"
 import Refetch from "@/components/shared/refetch"
+import { ArticleData } from "@/services/controlers/article/type"
+import { useState } from "react"
 
-export default function ArticleDetailClient({ slug }: { slug: string }) {
+export default function ArticleDetailClient({ slug, initialData }: { slug: string, initialData: ArticleData }) {
+
+  const [shouldFetch, setShouldFetch] = useState(!initialData || Object.keys(initialData).length === 0)  
+
   const {
-    data: article,
+    data: fetchedArticle,
     isLoading: isLoadingArticle,
     isFetching: isFetchingArticle,
     refetch: refetchArticle,
     isError: isErrorArticle,
-  } = useArticleDetail({ with: "user,category" }, slug)
+  } = useArticleDetail({ 
+    with: "user,category",
+  }, slug, shouldFetch, initialData );
+
+  const article = shouldFetch ? fetchedArticle : initialData;
+  
+  const handleRefresh = () => {
+    setShouldFetch(true);
+    refetchArticle();
+  };
+
+  const showLoading = isLoadingArticle && shouldFetch || Object.keys(article || {}).length === 0;
+  const showError = isErrorArticle && !isFetchingArticle && shouldFetch;
+  const showNoData = (showError && !article);
 
   return (
     <AsideContent>
-      {isLoadingArticle ? (
+      {showLoading ? (
         <div className="flex flex-col px-2 md:px-4 my-2 gap-y-1 min-h-screen bg-white animate-pulse">
           <span className="self-start align-baseline h-4 w-32 bg-gray-200 rounded"></span>
           <div className="h-10 w-3/4 bg-gray-200 rounded"></div>
@@ -40,22 +58,22 @@ export default function ArticleDetailClient({ slug }: { slug: string }) {
             </div>
           </div>
         </div>
-      ) : (isErrorArticle && !isFetchingArticle && !article) || Object.keys(article || {}).length === 0 ? (
+      ) : showNoData ? (
         <div className="flex w-full h-full justify-center">
           <div className="flex min-h-screen flex-col items-center justify-center gap-2">
             <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
           </div>
         </div>
-      ) : isErrorArticle && !isFetchingArticle ? (
+      ) : showError ? (
         <div className="w-full h-full flex justify-center">
           <div className="flex min-h-screen flex-col items-center justify-center gap-2">
-            <Refetch refetch={refetchArticle}/>
+            <Refetch refetch={handleRefresh}/>
           </div>
         </div>
       ) : (
         <div className="flex flex-col px-2 md:px-4 my-2 gap-y-1 min-h-screen bg-white">
           <span className="self-start align-baseline text-base font-semibold text-[#929AAB]">
-            {article?.category.name}
+            {article?.category?.name}
           </span>
           <h5 className="text-3xl md:text-4xl text-start font-bold tracking-tight text-gray-900 dark:text-white">
             {article?.title}
@@ -63,14 +81,16 @@ export default function ArticleDetailClient({ slug }: { slug: string }) {
           <span className="self-start align-baseline text-base font-semibold text-black">{article?.user?.name}</span>
           <span className="self-start align-baseline text-sm font-medium text-gray-600">{article?.published_at}</span>
           <div className="relative w-full group mb-6">
-            <Image
-              className="w-full max-h-96 rounded-sm shadow-lg object-cover"
-              src={article?.thumbnail || ''}
-              alt="Article Thumbnail"
-              width={1200}
-              height={720}
-              priority
-            />
+            {article?.thumbnail && (
+              <Image
+                className="w-full max-h-96 rounded-sm shadow-lg object-cover"
+                src={article.thumbnail || "/placeholder.svg"}
+                alt="Article Thumbnail"
+                width={1200}
+                height={720}
+                priority
+              />
+            )}
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out" />
           </div>
           <RichTextContent content={article?.content || ""} className="px-0 md:px-4" />

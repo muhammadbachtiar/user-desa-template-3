@@ -1,58 +1,12 @@
-// import { notFound } from "next/navigation"
-// import type { MenuWithContent } from "@/types/menu"
-// import useMenu from "@/hooks/settings/useMenu"
-// import RichTextContent from "@/components/RichTextContent"
-// import useStaticPage from "@/hooks/contents/useStaticPage"
-// import AsideContent from "@/components/app-layout/aside-content"
-
-// function findMenuItemByPath(items: MenuWithContent, path: string[], currentPath = ""): MenuWithContent[0] | null {
-//   for (const item of items) {
-//     const itemPath = item.route ? `${currentPath}${item.route}` : currentPath
-
-//     if (itemPath === `/${path.join("/")}`) {
-//       return item
-//     }
-
-//     if (item.child && item.child.length > 0) {
-//       const found = findMenuItemByPath(item.child, path, itemPath)
-//       if (found) return found
-//     }
-//   }
-
-//   return null
-// }
-
-// export default function DynamicPage({ params }: { params: { slug: string[] } }) {
-//   const { data : dataMenu } = useMenu();
-//   // const { data : dataMenu, isLoading: isMenuLoading, isFetching: isMenuFetching, refetch: refetchMenu, isError: isMenuError } = useMenu();
-//   const path = params.slug || []
-//   const menuItem = findMenuItemByPath(dataMenu.value, path)
-  
-//   if (!menuItem) {
-//     notFound()
-//   }
-  
-//   const { data: staticPage} = useStaticPage({}, menuItem.staticPage || "");
-//   // const { data: staticPage, isLoading, isFetching, refetch, isError } = useStaticPage({}, menuItem.staticPage || "");
-
-//   return (
-//      <AsideContent>
-//         <RichTextContent 
-//               content={staticPage.value.content} 
-//               className="px-4" 
-//           />
-//       </AsideContent>
-//   )
-// }
-
-
-import { notFound } from "next/navigation";
-import type { MenuWithContent } from "@/types/menu";
-import useMenu from "@/hooks/settings/useMenu";
-import RichTextContent from "@/components/RichTextContent";
-import useStaticPage from "@/hooks/contents/useStaticPage";
+'use client'
+import type {  MenuWithContent } from "@/types/menu";
+import RichTextContent from "@/components/shared/RichTextContent";
 import AsideContent from "@/components/app-layout/aside-content";
-import { PageProps } from "../../../.next/types/app/page";
+import { PageProps } from "../../../.next/types/app/[...slug]/page";
+import Refetch from "@/components/shared/refetch";
+import useStaticPage from "@/hooks/settings/useStaticPage";
+import { use } from "react";
+import useSetting from "@/hooks/settings/useSettings";
 
 function findMenuItemByPath(
   items: MenuWithContent,
@@ -80,19 +34,48 @@ interface DynamicPageProps {
 }
 
 export default function DynamicPage({ params }: DynamicPageProps & PageProps) {
-  const { data: dataMenu } = useMenu();
-  const path = params.slug || [];
-  const menuItem = findMenuItemByPath(dataMenu.value, path);
+  const unwrappedParams = use(params);
+  const { data: menu } = useSetting('menu', {});
+  const path = unwrappedParams.slug || [];
+  const menuItem = menu?.value ? findMenuItemByPath(menu.value, path) : null;
 
-  if (!menuItem) {
-    notFound();
-  }
+  const { data: staticPage, isLoading, isError, isFetching, refetch } = useStaticPage({}, menuItem?.staticPage || "");
 
-  const { data: staticPage } = useStaticPage({}, menuItem.staticPage || "");
 
   return (
     <AsideContent>
-      <RichTextContent content={staticPage.value.content} className="px-4" />
+      {isLoading ? (
+            <>
+              <div className="animate-pulse space-y-4 p-6">
+                <div className="h-8 w-3/4 bg-gray-200 rounded"></div>
+                <div className="flex space-x-4">
+                  <div className="h-4 w-1/4 bg-gray-200 rounded"></div>
+                  <div className="h-4 w-1/6 bg-gray-200 rounded"></div>
+                </div>
+                <div className="h-56 w-full bg-gray-200 rounded"></div>
+                <div className="space-y-2">
+                  <div className="h-4 w-full bg-gray-200 rounded"></div>
+                  <div className="h-4 w-5/6 bg-gray-200 rounded"></div>
+                  <div className="h-4 w-4/5 bg-gray-200 rounded"></div>
+                  <div className="h-4 w-3/4 bg-gray-200 rounded"></div>
+                </div>
+              </div>
+            </>
+      ) : isError && !isFetching && !staticPage || !staticPage ? (
+          <div className="flex col-span-6 w-full h-full justify-center">
+              <div className="flex min-h-screen flex-col items-center justify-center gap-2">
+                  <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+              </div>
+          </div>
+      ) : isError && !isFetching  ? (
+        <div className="flex col-span-6 w-full h-full justify-center">
+            <div className="flex min-h-screen flex-col items-center justify-center gap-2">
+              <Refetch refetch={refetch} />
+            </div>
+        </div>
+      ) : (
+        <RichTextContent content={staticPage.content} className="px-4" />
+      )}
     </AsideContent>
   );
 }

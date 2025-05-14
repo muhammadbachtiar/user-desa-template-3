@@ -1,6 +1,6 @@
 'use client'
 
-import HeadingBadge from "../shared/headingBadge";
+import HeadingBadge from "../../shared/headingBadge";
 import Image from "next/image";
 import useStructure from "@/hooks/contents/useStructure";
 import { FaWhatsapp } from "react-icons/fa6";

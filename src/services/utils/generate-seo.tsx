@@ -46,7 +46,7 @@ export function formatKeywords(keywords: string | string[] | null): string {
   return Array.isArray(keywords) ? keywords.join(", ") : keywords
 }
 
-export async function generateContentMetadata<T extends Content>(
+export async function formatMetadata<T extends Content>(
   content: T,
   options?: {
     baseUrl?: string

@@ -25,7 +25,7 @@ import {
   TooltipItem,
 } from "chart.js"
 import { Bar, Line } from "react-chartjs-2"
-import HeadingBadge from "../shared/headingBadge"
+import HeadingBadge from "@/components/shared/headingBadge"
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement)
 

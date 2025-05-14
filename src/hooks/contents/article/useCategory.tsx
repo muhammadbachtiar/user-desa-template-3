@@ -1,4 +1,4 @@
-import { CategoryData } from "@/services/controlers/article/type";
+import { CategoryData } from "@/services/controlers/category/type";
 import CategoryService from "@/services/controlers/category/category.service";
 import { useQuery } from "@tanstack/react-query";
 

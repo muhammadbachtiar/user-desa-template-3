@@ -4,17 +4,15 @@ import { BiPlus } from "react-icons/bi";
 import SelectCategory from "@/components/shared/form/selectCategory";
 import EnterpriseCard from "@/components/shared/enterpriseCard";
 import useEnterprise from "@/hooks/contents/enterprise/useList";
-import useInformation from "@/hooks/settings/useInformation";
+import useSetting from "@/hooks/settings/useSettings";
+import Refetch from "@/components/shared/refetch";
 
 
 export default function Home() {
 const [categoryId, setCategoryId] = useState(0);
 const [search, setSearch] = useState('');
 
-// const { data: setting, isLoading: isSettingLoading, isFetching: isSettingFetching, refetch: refetchSetting, isError: isSettingError } = useInformation({}, "enterprise");
-// const { data, isLoading, isFetching, refetch, isError } = useEnterprise({"search": search, "categoryId": categoryId});
-
-const { data: setting } = useInformation({}, "enterprise");
+const { data: setting, isLoading: isSettingLoading, isFetching: isSettingFetching, refetch: refetchSetting, isError: isSettingError } = useSetting("enterprise", {});
 const { data, isLoading, isFetching,  isError } = useEnterprise({"search": search, "categoryId": categoryId});
 
 const backgroundStyle = setting?.value?.imageUrl 
@@ -23,13 +21,29 @@ const backgroundStyle = setting?.value?.imageUrl
 
   return (
       <>
-        <section style={backgroundStyle} className={`relative rounded-md p-4 lg:p-8 bg-cover bg-bottom w-full h-44 md:h-60 lg:h-80 flex justify-start items-end`}>
-            <div className="absolute inset-0 bg-black/50 rounded-md"></div>
-            <div className="relative z-10 px-0 sm:px-8  text-start">
-                <h2 className="mb-2 text-3xl md:text-5xl font-bold text-white lg:text-6xl">{setting.value.title}</h2>
-                <p className="sm:mb-2 text-sm sm:text-md font-light tracking-tight text-white">{setting.value.description}</p>
-            </div>
-        </section>
+        {
+            isSettingLoading ? (
+                <div className="flex animate-pulse mb-4 col-span-8 w-full">
+                <div className="h-52 w-full flex-1 rounded-2xl bg-gray-200"></div>
+                </div>
+            ) : isSettingError && !isSettingFetching && !setting || !setting.value ? (
+                <div className="flex min-h-52 mb-4 justify-center col-span-8 w-full">
+                <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
+                </div>
+            ) : isSettingError && !isSettingFetching  ? (
+                <div className="flex min-h-52 justify-center items-center mb-4 col-span-8 w-full">
+                    <Refetch refetch={refetchSetting} />
+                </div>
+            ) : (
+                <section style={backgroundStyle} className={`relative rounded-md p-4 lg:p-8 bg-cover bg-bottom w-full h-44 md:h-60 lg:h-80 flex justify-start items-end`}>
+                    <div className="absolute inset-0 bg-black/50 rounded-md"></div>
+                    <div className="relative z-10 px-0 sm:px-8  text-start">
+                        <h2 className="mb-2 text-3xl md:text-5xl font-bold text-white lg:text-6xl">{setting.value.title}</h2>
+                        <p className="sm:mb-2 text-sm sm:text-md font-light tracking-tight text-white">{setting.value.description}</p>
+                    </div>
+                </section>
+            )
+        }
         <div className="grid w-full grid-cols-3 lg:grid-cols-4 gap-y-6">
             <div className="bg-transparent rounded-s-md col-span-4 lg:py-6 grid grid-cols-6">    
                 <div className="col-span-6 grid grid-cols-6 gap-8">

@@ -125,9 +125,9 @@ return (
                     </div>
                 ))
                 ) : isError && !isFetching && !articles || !articles?.pages ? (
-                    <div className="flex min-h-52 mb-4 justify-center col-span-8 w-full">
-                      <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
-                    </div>
+                  <div className="block h-52 justify-center items-center w-full">
+                    <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
+                </div>
                 ) : isError && !isFetching  ? (
                     <div className="flex min-h-52 justify-center items-center mb-4 col-span-8 w-full">
                       <Refetch  refetch={refetch} />

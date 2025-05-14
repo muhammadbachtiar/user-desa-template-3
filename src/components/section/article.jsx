@@ -20,7 +20,7 @@ export default function Article() {
                     <div className="h-52 w-full flex-1 rounded-2xl bg-gray-200"></div>
                   </div>
               ) : isSettingError && !isSettingFetching && !setting || !setting.value ? (
-                  <div className="flex min-h-52 mb-4 justify-center col-span-8 w-full">
+                  <div className="flex min-h-52 mb-4 justify-center items-center col-span-8 w-full">
                     <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
                   </div>
               ) : isSettingError && !isSettingFetching  ? (

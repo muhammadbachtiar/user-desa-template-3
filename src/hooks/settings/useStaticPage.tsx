@@ -16,7 +16,6 @@ function useStaticPage(params: Record<string, string | number> = {}, slug: strin
         },
       });
 
-  
     return {
       data: data?.data,
       isLoading,

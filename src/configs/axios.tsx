@@ -1,10 +1,11 @@
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
-const API_VERSION = "/api/v1/public";
+const API_PUBLIC_VERSION = "/api/v1/public";
+const API_PRIVATE_VERSION = "/api/v1";
 
 const axiosConfig = axios.create({
-    baseURL: API_URL + API_VERSION,
+    baseURL: API_URL + API_PUBLIC_VERSION,
     headers: {
       Accept: "application/json",
     },
@@ -19,6 +20,22 @@ axiosConfig.interceptors.request.use(
         console.error("Request error:", error);
         return Promise.reject(error); 
     }
+);
+
+export const axiosConfigPrivate = axios.create({
+  baseURL: API_URL + API_PRIVATE_VERSION,
+  headers: {
+    Accept: "application/json",
+  },
+});
+
+axiosConfigPrivate.interceptors.request.use(
+  async function (config) {
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
 );
 
 export default axiosConfig;

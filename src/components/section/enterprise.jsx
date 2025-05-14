@@ -1,18 +1,35 @@
 import SliderCard from '../shared/sliderEnterprise';
 import Link from 'next/link';
-import useInformation from '@/hooks/settings/useInformation';
+import useSetting from "@/hooks/settings/useSettings";
 
 export default function Enterprise() {
-  const { data: setting, isLoading: isSettingLoading, isFetching: isSettingFetching, refetch: refetchSetting, isError: isSettingError } = useInformation({}, "enterprise");
+
+  const { data: setting, isLoading: isSettingLoading, isFetching: isSettingFetching, refetch: refetchSetting, isError: isSettingError } = useSetting("enterprise", {});
 
   return (
     <section className="relative w-full flex justify-center items-center">
         <div className="max-w-full w-full grid grid-cols-8 gap-6 bg-white py-5 dark:bg-gray-700 dark:border-gray-600 ">
           <div className="col-span-8 grid grid-cols-6 gap-8 justify-between">
-              <div className="col-span-6 md:col-span-4 flex flex-col justify-start">
-                  <h2 className="self-start text-md tracking-tighter font-semibold uppercase text-blue-700">{setting.value.title}</h2>
-                  <p className="self-start text-md font-normal text-black">{setting.value.description}</p>
-              </div>
+            {
+                isSettingLoading ? (
+                    <div className="flex animate-pulse mb-4 col-span-8 w-full">
+                    <div className="h-52 w-full flex-1 rounded-2xl bg-gray-200"></div>
+                    </div>
+                ) : isSettingError && !isSettingFetching && !setting || !setting.value ? (
+                    <div className="flex min-h-52 mb-4 justify-center col-span-8 w-full">
+                    <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
+                    </div>
+                ) : isSettingError && !isSettingFetching  ? (
+                    <div className="flex min-h-52 justify-center items-center mb-4 col-span-8 w-full">
+                        <Refetch refetch={refetchSetting} />
+                    </div>
+                ) : (
+                    <div className="col-span-6 md:col-span-4 flex flex-col justify-start">
+                        <h2 className="self-start text-md tracking-tighter font-semibold uppercase text-blue-700">{setting.value.title}</h2>
+                        <p className="self-start text-md font-normal text-black">{setting.value.description}</p>
+                    </div>
+                )
+            }
               <div className="col-span-6 md:col-span-2 text-start md:text-end">
                   <Link href={"/enterprise"} className="inline-flex font-medium items-center text-center text-blue-700 hover:text-blue-400 rounded-xl px-4 py-2 border-2 border-blue-300 hover:underline hover:bg-blue-100 focus:text-blue-500 focus:underline">
                       Lihat Semua

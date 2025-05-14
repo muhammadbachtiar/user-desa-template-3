@@ -6,18 +6,9 @@ import Image from "next/image";
 import { CSSProperties, useState } from "react"
 import React from "react";
 import LightboxImage from "./Lightbox";
-import useInfografis from "@/hooks/contents/useInfografis";
+import useInfografis from "@/hooks/contents/infografis/useInfografis";
 import Refetch from "./refetch";
-
-interface Infografis {
-    id: number;
-    user_id: number;
-    title: string;
-    slug: string;
-    link: string
-    published_at: string; 
-    description: string;
-  }
+import { Infografis } from "@/services/controlers/infografis/type";
 
 interface SliderCardProps {
     useButton?: boolean;
@@ -62,7 +53,7 @@ function SamplePrevArrow(props: SliderButtonProps) {
 let settings, height : string;
   
 settings = {
-  dots: true,
+  dots: false,
   infinite: false,
   speed: 500,
   slidesToShow: 1,

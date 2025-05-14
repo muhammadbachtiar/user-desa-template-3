@@ -1,4 +1,4 @@
-import { Meta } from "../article/type";
+import { Meta } from "@/types/meta";
 
 export type TourData = {
     id: number;

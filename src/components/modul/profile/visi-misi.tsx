@@ -1,7 +1,7 @@
 'use client'
 
-import HeadingBadge from "../shared/headingBadge";
-import RichTextContent from "../RichTextContent";
+import HeadingBadge from "../../shared/headingBadge";
+import RichTextContent from "../../shared/RichTextContent";
 
 const VisiMisi = () => {
 

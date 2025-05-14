@@ -29,42 +29,42 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.prose > h1, .prose > h2, .prose > h3, .prose > h4, .prose > h5, .prose > h6 {
+.prose  h1, .prose  h2, .prose  h3, .prose  h4, .prose  h5, .prose  h6 {
   font-weight: bold;
   line-height: 1.25;
   margin-bottom: 1rem;
   color: black;
 }
 
-.prose > h1 { font-size: 2.5rem; }
-.prose > h2 { font-size: 2rem; }
-.prose > h3 { font-size: 1.75rem; }
-.prose > h4 { font-size: 1.5rem; }
-.prose > h5 { font-size: 1.25rem; }
-.prose > h6 { font-size: 1rem; }
+.prose h1 { font-size: 2.5rem; }
+.prose h2 { font-size: 2rem; }
+.prose h3 { font-size: 1.75rem; }
+.prose h4 { font-size: 1.5rem; }
+.prose h5 { font-size: 1.25rem; }
+.prose h6 { font-size: 1rem; }
 
-.prose > p {
+.prose p {
   margin-bottom: 1rem;
   color: black;
 }
 
-.prose > a {
+.prose a {
   color: #007bff;
   text-decoration: none;
 }
 
-.prose > ul, ol {
+.prose ul, .prose ol {
   margin-left: 1rem;
   margin-bottom: 1rem;
   list-style: initial;
   color: black;
 }
 
-.prose > li {
+.prose li {
   margin-bottom: 0.5rem;
 }
 
-.prose > table {
+.prose table {
   display: block;
   max-width: 100%;
   overflow-x: auto;
@@ -73,13 +73,13 @@ body {
   color: black;
 }
 
-.prose > th, td {
+.prose th, .prose td {
   border: 1px solid #ddd;
   padding: 0.75rem;
   text-align: left;
 }
 
-.prose > img {
+.prose img {
   display: inline;
 }
 
