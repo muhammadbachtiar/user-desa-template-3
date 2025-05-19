@@ -72,7 +72,7 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
                         </div>
                          <div className="col-span-6">  
                             <dl className="text-gray-900 divide-y divide-gray-100 dark:text-white dark:divide-gray-700">
-                                {IsArticleLoading ? (
+                                {IsArticleLoading || (IsArticleFetching || (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0)) ? (
                                 Array.from({ length: 4 }).map((_, index) => (
                                     <div
                                     key={index}
@@ -82,9 +82,9 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
                                     <dt className="h-4 bg-gray-200 rounded w-1/2"></dt>
                                     </div>
                                 ))
-                                ) : !IsArticleFetching && articles?.pages[0].data.length === 0 ? (
+                                ) : !isArticleError && !IsArticleFetching && (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0) ? (
                                 <div className="flex flex-col items-center justify-center py-12">
-                                    <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+                                    <p className="text-black text-2xl dark:text-gray-400">Artikel tidak tersedia</p>
                                 </div>
                                 ) : isArticleError && !IsArticleFetching ? (
                                 <div className="flex flex-col items-center justify-center py-12">
@@ -119,7 +119,7 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
                             <hr className="h-px my-3 bg-gray-50 text-gray-400 border-1 dark:bg-gray-700"></hr>
                         </div>
                          <div className="col-span-6">  
-                            {isInfografisLoading ? (
+                            {isInfografisLoading || isInfografisFetching && (!infografis || infografis.length === 0) ? (
                                 Array.from({ length: 4 }).map((_, index) => (
                                     <div
                                     key={index}
@@ -129,9 +129,9 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
                                     <dt className="h-4 bg-gray-200 rounded w-1/2"></dt>
                                     </div>
                                 ))
-                                ) : !isInfografisFetching && infografis.length === 0 ? (
+                                ) : !isInfografisFetching && (!infografis || infografis.length === 0) ? (
                                 <div className="flex flex-col items-center justify-center py-12">
-                                    <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+                                    <p className="text-black text-2xl dark:text-gray-400">Infografis tidak tersedia</p>
                                 </div>
                                 ) : isInfografisError && !isInfografisFetching ? (
                                 <div className="flex flex-col items-center justify-center py-12">
@@ -171,26 +171,26 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
                         </div>
                          <div className="col-span-6">  
                             <dl className="text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-                                {isTourLoading ? (
+                                {isTourLoading || isTourFetching && tour?.pages[0]?.data.length === 0 ? (
                                     Array.from({ length: 4 }).map((_, index) => (
                                         <div
-                                        key={index}
-                                        className="flex flex-col py-3 animate-pulse bg-gray-50 hover:bg-gray-100"
-                                        >
-                                        <dd className="h-6 bg-gray-200 rounded w-3/4 mb-2"></dd>
-                                        <dt className="h-4 bg-gray-200 rounded w-1/2"></dt>
+                                            key={index}
+                                            className="flex flex-col py-3 animate-pulse bg-gray-50 hover:bg-gray-100"
+                                            >
+                                            <dd className="h-6 bg-gray-200 rounded w-3/4 mb-2"></dd>
+                                            <dt className="h-4 bg-gray-200 rounded w-1/2"></dt>
                                         </div>
                                     ))
-                                    ) : !isTourFetching && tour?.pages[0].data.length === 0 ? (
-                                    <div className="flex flex-col items-center justify-center py-12">
-                                        <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
-                                    </div>
+                                    ) : !isTourFetching && tour?.pages[0]?.data.length === 0 ? (
+                                        <div className="flex flex-col items-center justify-center py-12">
+                                            <p className="text-black text-2xl dark:text-gray-400">Wisata tidak tersedia</p>
+                                        </div>
                                     ) : isTourError && !isTourFetching ? (
-                                    <div className="flex flex-col items-center justify-center py-12">
-                                        <Refetch refetch={refetchTour} />
-                                    </div>
+                                        <div className="flex flex-col items-center justify-center py-12">
+                                            <Refetch refetch={refetchTour} />
+                                        </div>
                                     ) : (
-                                    tour?.pages[0].data.map((tour, index) => (
+                                    tour?.pages[0]?.data.map((tour, index) => (
                                         <Link  key={tour.id} href={`/tour/${tour.slug}`} tabIndex={1} className="col-span-6 md:col-span-3 px-3 md:px-0 lg:col-span-2 w-full">
                                             <div
                                             className={`flex flex-col py-3 ${

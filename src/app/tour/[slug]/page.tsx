@@ -1,8 +1,6 @@
 "use client"
 
 import { useParams } from "next/navigation";
-import { Button } from "flowbite-react";
-import { LuRefreshCcw } from "react-icons/lu";
 import Image from "next/image";
 import useTourDetail from "@/hooks/contents/tour/useDetail";
 import { CgMail } from "react-icons/cg";
@@ -10,6 +8,7 @@ import { BiGlobe } from "react-icons/bi";
 import { CiMap } from "react-icons/ci";
 import sosmedIcons from "@/components/shared/sosmedIcons";
 import StreetViewChecker from "@/services/utils/checkStreetView";
+import Refetch from "@/components/shared/refetch";
 
 const TourDetail = () => {
     const { slug } = useParams();
@@ -23,7 +22,7 @@ const TourDetail = () => {
   return (
     <>  
         <div className="min-h-screen w-full">
-            {isLoadingTour ? (
+            {isLoadingTour || isFetchingTour && (!tour || Object.keys(tour || {}).length === 0) ? (
                 <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 h-full animate-pulse">
 
                 <div className="lg:col-span-6 lg:sticky lg:top-0 lg:h-screen">
@@ -58,7 +57,7 @@ const TourDetail = () => {
                   </div>
                 </div>
               </div>              
-            ) : isErrorTour && !isFetchingTour && !tour || Object.keys(tour || {}).length === 0 ? (
+            ) : !isErrorTour && !isFetchingTour && (!tour || Object.keys(tour || {}).length === 0) ? (
                 <div className="flex w-full h-full justify-center">
                     <div className="flex min-h-screen flex-col items-center justify-center gap-2">
                         <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
@@ -67,15 +66,7 @@ const TourDetail = () => {
             ) : isErrorTour && !isFetchingTour  ? (
                 <div className="w-full h-full flex justify-center">
                     <div className="flex min-h-screen flex-col items-center justify-center gap-2">
-                        <p className="text-black text-2xl dark:text-gray-400">Terjadi kesalahan, silakan ulangi</p>
-                        <Button
-                            size="sm"
-                            onClick={() => {
-                                refetchTour();
-                            }}
-                        >
-                            <LuRefreshCcw size={24} />
-                        </Button>
+                        <Refetch refetch={refetchTour}/>
                     </div>
                 </div>
             ) : (

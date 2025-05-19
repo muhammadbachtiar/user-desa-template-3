@@ -118,15 +118,15 @@ return (
         <div>
             <Slider {...settings}>
                {
-                isLoading ? (
+                isLoading || (isFetching &&  (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0))  ? (
                   Array.from({ length: 4 }).map((_, index) => (
                     <div key={index} className="flex px-3 animate-pulse w-full">
                       <div className="h-64 w-full flex-1 rounded-2xl bg-gray-200"></div>
                     </div>
                 ))
-                ) : isError && !isFetching && !articles || !articles?.pages ? (
+                ) : !isError && !isFetching &&  (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0) ? (
                   <div className="block h-52 justify-center items-center w-full">
-                    <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
+                    <p className="text-black text-center text-md dark:text-gray-400">Artikel tidak tersedia</p>
                 </div>
                 ) : isError && !isFetching  ? (
                     <div className="flex min-h-52 justify-center items-center mb-4 col-span-8 w-full">

@@ -14,11 +14,11 @@ const [search, setSearch] = useState('');
 
 const { data: setting, isLoading: isSettingLoading, isFetching: isSettingFetching, refetch: refetchSetting, isError: isSettingError } = useSetting("article", {});
 const { data: articles, isLoading, isFetching, hasNextPage, fetchNextPage, refetch, isError } = useArticle({"search": search, "page_size": 6}, categoryId);
-const allArticles = articles?.pages.flatMap(page => page.data) || [];
+const allArticles = articles?.pages.flatMap(page => page?.data) || [];
 
 const backgroundStyle = setting?.value?.imageUrl 
-    ? { backgroundImage: `url(${setting.value.imageUrl})` }
-    : { backgroundColor: '#f3f4f6' };
+    ? { backgroundImage: `url(${setting.value.imageUrl})`}
+    : { backgroundImage: `url(/images/unavailable-image.png)` }
 
   return (
       <>
@@ -26,10 +26,6 @@ const backgroundStyle = setting?.value?.imageUrl
             isSettingLoading ? (
                 <div className="flex animate-pulse mb-4 col-span-8 w-full">
                 <div className="h-52 w-full flex-1 rounded-2xl bg-gray-200"></div>
-                </div>
-            ) : isSettingError && !isSettingFetching && !setting || !setting.value ? (
-                <div className="flex min-h-52 mb-4 justify-center col-span-8 w-full">
-                <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
                 </div>
             ) : isSettingError && !isSettingFetching  ? (
                 <div className="flex min-h-52 justify-center items-center mb-4 col-span-8 w-full">
@@ -39,7 +35,7 @@ const backgroundStyle = setting?.value?.imageUrl
                 <section style={backgroundStyle} className={`relative rounded-md p-4 lg:p-14 bg-cover bg-bottom w-full h-44 md:h-60 lg:h-80 flex justify-start items-end`}>
                     <div className="absolute inset-0 bg-black/50 rounded-md"></div>
                     <div className="relative z-10 px-0 sm:px-8  text-start">
-                        <h2 className="mb-4 text-3xl md:text-5xl font-bold text-white lg:text-6xl">{setting.value.title}</h2>
+                        <h2 className="mb-4 text-3xl md:text-5xl font-bold text-white lg:text-6xl">{setting?.value?.title ?? "[Judul artikel belum diatur]"}</h2>
                     </div>
                 </section>
             )
@@ -63,16 +59,16 @@ const backgroundStyle = setting?.value?.imageUrl
                         </div>
                     </div>
                     <div className="col-span-6 grid grid-cols-6 md:gap-x-4 gap-y-6 justify-items-center">
-                        {isLoading ? (
+                        {isLoading ||  (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0) && isFetching ? (
                              Array.from({ length: 6 }).map((_, index) => (
                                 <div key={index} className="col-span-6 md:col-span-3 px-3 md:px-0 lg:col-span-2 animate-pulse w-full">
                                   <div className="h-64 w-full flex-1 rounded-2xl bg-gray-200"></div>
                                 </div>
                             ))
-                        ) : !isFetching && allArticles.length === 0 ? (
+                        ) : !isError && !isFetching && (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0) ? (
                             <div className="flex col-span-6 w-full h-full justify-center">
                                 <div className="flex min-h-96 flex-col items-center justify-center gap-2">
-                                    <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+                                    <p className="text-black text-2xl dark:text-gray-400">Artikel tidak tersedia</p>
                                 </div>
                             </div>
                         ) : isError && !isFetching  ? (

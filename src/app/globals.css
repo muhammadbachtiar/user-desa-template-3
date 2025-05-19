@@ -84,18 +84,18 @@ body {
 }
 
 @media (max-width: 768px) {
-  .prose > h1 { font-size: 2rem; }
-  .prose > h2 { font-size: 1.75rem; }
-  .prose > h3 { font-size: 1.5rem; }
-  .prose > h4 { font-size: 1.25rem; }
-  .prose > h5 { font-size: 1rem; }
-  .prose > h6 { font-size: 0.875rem; }
+  .prose h1 { font-size: 2rem; }
+  .prose h2 { font-size: 1.75rem; }
+  .prose h3 { font-size: 1.5rem; }
+  .prose h4 { font-size: 1.25rem; }
+  .prose h5 { font-size: 1rem; }
+  .prose h6 { font-size: 0.875rem; }
 }
 @media (max-width: 480px) {
-  .prose > h1 { font-size: 1.75rem; }
-  .prose > h2 { font-size: 1.5rem; }
-  .prose > h3 { font-size: 1.25rem; }
-  .prose > h4 { font-size: 1rem; }
-  .prose > h5 { font-size: 0.875rem; }
-  .prose > h6 { font-size: 0.75rem; }
+  .prose h1 { font-size: 1.75rem; }
+  .prose h2 { font-size: 1.5rem; }
+  .prose h3 { font-size: 1.25rem; }
+  .prose h4 { font-size: 1rem; }
+  .prose h5 { font-size: 0.875rem; }
+  .prose h6 { font-size: 0.75rem; }
 }

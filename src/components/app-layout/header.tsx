@@ -33,14 +33,33 @@ export default function Header() {
                             <div className="h-10 w-10 rounded-2xl bg-gray-200"></div>
                         </div>
                     </div>
-                ) : isError && !isFetching && !menu || menu.value?.length === 0 ? (
-                    <div className="flex flex-col items-center justify-top gap-2">
-                        <p className="text-black text-md dark:text-gray-400">Data tidak tersedia</p>
-                    </div>
                 ) : isError && !isFetching  ? (
                     <Refetch refetch={refetch} />
                 ) : (
-                    <MainNav menuData={menu.value} />
+                    <MainNav menuData={(menu?.value?.length > 0) ? menu.value
+                            :  [
+                                {
+                                    "order": 1,
+                                    "title": "Home",
+                                    "route": "/",
+                                    "staticPage": null,
+                                    "child": null
+                                },
+                                {
+                                    "order": 2,
+                                    "title": "Artikel",
+                                    "route": "/article",
+                                    "staticPage": null,
+                                    "child": null
+                                },
+                                {
+                                    "order": 3,
+                                    "title": "Wisata",
+                                    "route": "/tour",
+                                    "staticPage": null,
+                                    "child": null
+                                }
+                            ]}  />
                 )
             }
             <div className="items-center justify-between w-full flex lg:w-2xs md:order-3" id="navbar-sticky">

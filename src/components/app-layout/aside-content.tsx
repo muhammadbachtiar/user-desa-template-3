@@ -27,7 +27,7 @@ export default function AsideContent({ children }: { children: React.ReactNode})
             <h2 className="text-xl font-bold text-blue-500 mb-4 pb-2 border-gray-300 border-b">Artikel Populer</h2>
             <ul className="space-y-4">
               {
-                isLoading ? (
+                isLoading ||  (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0) && isFetching ? (
                   Array.from({ length: 4 }).map((_, index) => (
                     <li key={index} className="flex animate-pulse">
                       <div className="mr-3 min-w-32 relative group mb-3">
@@ -40,9 +40,9 @@ export default function AsideContent({ children }: { children: React.ReactNode})
                       </div>
                     </li>
                 ))
-                ) : isError && !isFetching && !articles || !articles?.pages ? (
+                ) : !isError && !isFetching && (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0) ? (
                     <div className="flex min-h-52 mb-4 justify-center col-span-8 w-full">
-                      <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
+                      <p className="text-black text-center text-md dark:text-gray-400">Artikel tidak tersedia</p>
                     </div>
                 ) : isError && !isFetching  ? (
                     <div className="flex min-h-52 justify-center items-center mb-4 col-span-8 w-full">

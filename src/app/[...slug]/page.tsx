@@ -1,5 +1,5 @@
 'use client'
-import type {  MenuWithContent } from "@/types/menu";
+import type { MenuWithContent } from "@/types/menu";
 import RichTextContent from "@/components/shared/RichTextContent";
 import AsideContent from "@/components/app-layout/aside-content";
 import { PageProps } from "../../../.next/types/app/[...slug]/page";
@@ -37,14 +37,14 @@ export default function DynamicPage({ params }: DynamicPageProps & PageProps) {
   const unwrappedParams = use(params);
   const { data: menu } = useSetting('menu', {});
   const path = unwrappedParams.slug || [];
-  const menuItem = menu?.value ? findMenuItemByPath(menu.value, path) : null;
+  const menuItem = Array.isArray(menu?.value) ? findMenuItemByPath(menu.value, path) : null;
 
   const { data: staticPage, isLoading, isError, isFetching, refetch } = useStaticPage({}, menuItem?.staticPage || "");
 
 
   return (
     <AsideContent>
-      {isLoading ? (
+      {isLoading || (!staticPage?.content && isFetching) ? (
             <>
               <div className="animate-pulse space-y-4 p-6">
                 <div className="h-8 w-3/4 bg-gray-200 rounded"></div>
@@ -61,7 +61,7 @@ export default function DynamicPage({ params }: DynamicPageProps & PageProps) {
                 </div>
               </div>
             </>
-      ) : isError && !isFetching && !staticPage || !staticPage ? (
+      ) : !isError && !isFetching && !staticPage?.content ? (
           <div className="flex col-span-6 w-full h-full justify-center">
               <div className="flex min-h-screen flex-col items-center justify-center gap-2">
                   <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>

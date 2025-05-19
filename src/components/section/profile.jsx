@@ -13,12 +13,12 @@ export default function Profile() {
     {
       name: 'Kata Sambutan',
       content: <div className="bg-gray-50 dark:bg-gray-700 rounded-2xl min-h-[400px] max-h-screen overflow-y-scroll flex flex-col items-center space-y-6">
-                  {isvillageProgramLoading ? (
+                  {isvillageProgramLoading || isvillageProgramFetching && !welcomeMessage ? (
                          <></>
-                    ) : isWellcomeMessageError && !isvillageProgramFetching && !welcomeMessage || !welcomeMessage? (
+                    ) : !isWellcomeMessageError && !isvillageProgramFetching && !welcomeMessage? (
                         <div className="flex col-span-6 w-full min-h-[400px] justify-center">
                             <div className="flex flex-col items-center justify-center gap-2">
-                                <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+                                <p className="text-black text-2xl dark:text-gray-400">Kata sambutan tidak tersedia</p>
                             </div>
                         </div>
                     ) : isWellcomeMessageError && !isvillageProgramFetching  ? (
@@ -36,12 +36,12 @@ export default function Profile() {
     {
       name: 'Program Desa',
       content: <div className="bg-gray-50 dark:bg-gray-700 rounded-2xl min-h-[400px]  max-h-screen overflow-y-scroll">
-                    {isWellcomeMessageLoading ? (
+                    {isWellcomeMessageLoading || isvillageProgramFetching && !villageProgram? (
                         <></>
-                    ) : isvillageProgramError && !isWellcomeMessageFetching && !villageProgram || !villageProgram ? (
+                    ) : !isvillageProgramError && !isWellcomeMessageFetching && !villageProgram  ? (
                         <div className="flex col-span-6 w-full min-h-[400px] justify-center">
                             <div className="flex flex-col items-center justify-center gap-2">
-                                <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+                                <p className="text-black text-2xl dark:text-gray-400">Program desa tidak tersedia</p>
                             </div>
                         </div>
                     ) : isvillageProgramError && !isWellcomeMessageFetching  ? (

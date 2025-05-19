@@ -14,23 +14,23 @@ const Footer = () => {
             <div className="w-full">
                 <div className="grid grid-cols-4 gap-y-5 items-center justify-start mx-0 lg:mx-16">
                     {
-                        isSettingLoading ? (
+                        isSettingLoading || (isSettingFetching && !setting?.value) ? (
                             <>
                                  <div className="animate-pulse grid col-span-4 lg:col-span-3 grid-cols-4 gap-4 p-6">
-                                    <div className="col-span-4 lg:col-span-2 flex flex-col gap-2">
-                                        <div className="flex items-center gap-x-2">
-                                        <div className="h-4 w-4 bg-gray-300 rounded"></div>
-                                        <div className="h-4 w-3/4 bg-gray-300 rounded"></div>
+                                        <div className="col-span-4 lg:col-span-2 flex flex-col gap-2">
+                                            <div className="flex items-center gap-x-2">
+                                            <div className="h-4 w-4 bg-gray-300 rounded"></div>
+                                            <div className="h-4 w-3/4 bg-gray-300 rounded"></div>
+                                            </div>
+                                            <div className="flex items-center gap-x-2">
+                                            <div className="h-4 w-4 bg-gray-300 rounded"></div>
+                                            <div className="h-4 w-2/3 bg-gray-300 rounded"></div>
+                                            </div>
+                                            <div className="flex items-center gap-x-2">
+                                            <div className="h-4 w-4 bg-gray-300 rounded"></div>
+                                            <div className="h-4 w-3/5 bg-gray-300 rounded"></div>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center gap-x-2">
-                                        <div className="h-4 w-4 bg-gray-300 rounded"></div>
-                                        <div className="h-4 w-2/3 bg-gray-300 rounded"></div>
-                                        </div>
-                                        <div className="flex items-center gap-x-2">
-                                        <div className="h-4 w-4 bg-gray-300 rounded"></div>
-                                        <div className="h-4 w-3/5 bg-gray-300 rounded"></div>
-                                        </div>
-                                    </div>
 
                                     <div className="col-span-4 lg:col-span-2 flex flex-col gap-6">
                                         <div className="w-full flex flex-wrap gap-6 justify-start">
@@ -42,10 +42,6 @@ const Footer = () => {
                                     </div>
                                 </div>
                             </>
-                        ) : isSettingError && !isSettingFetching && !setting || !setting.value ? (
-                            <div className="flex min-h-52 mb-4 justify-center col-span-8 w-full">
-                            <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
-                            </div>
                         ) : isSettingError && !isSettingFetching  ? (
                             <div className="flex min-h-52 justify-center items-center mb-4 col-span-8 w-full">
                                 <Refetch refetch={refetchSetting} />
@@ -55,39 +51,39 @@ const Footer = () => {
                             <div className="col-span-4 lg:col-span-2 text-start flex flex-col gap-1">                       
                                 <div className="flex justify-start items-center gap-x-2">
                                     <FaLocationDot className="min-w-4 min-h-4 rounded-sm text-[#393E46]"></FaLocationDot>
-                                    <p className="flex flex-wrap text-md font-normal mb-0 text-gray-900 dark:text-white">{setting.value.contactUs.address}</p>
+                                    <p className="flex flex-wrap text-md font-normal mb-0 text-gray-900 dark:text-white">{setting?.value?.contactUs?.address || "[Alamat belum diatur]"}</p>
                                 </div>
                                 <div className="flex justify-start items-center gap-x-2">
                                     <FaPhone className="min-w-4 min-h-4 rounded-sm text-[#393E46]"></FaPhone>
-                                    <p className="flex flex-wrap text-md font-normal mb-0 text-gray-900 dark:text-white">{setting.value.contactUs.phone}</p>
+                                    <p className="flex flex-wrap text-md font-normal mb-0 text-gray-900 dark:text-white">{setting?.value?.contactUs?.phone || "[Nomor telepon belum diatur]"}</p>
                                 </div>
                                 <div className="flex justify-start items-center gap-x-2">
                                     <MdEmail className="min-w-4 min-h-4 rounded-sm text-[#393E46]"></MdEmail>
-                                    <p className="flex flex-wrap text-md font-normal mb-0 text-gray-900 dark:text-white">{setting.value.contactUs.email}</p>
+                                    <p className="flex flex-wrap text-md font-normal mb-0 text-gray-900 dark:text-white">{setting?.value?.contactUs?.email || "[Email belum diatur]"}</p>
                                 </div>
                             </div>
                             <div className="col-span-4 lg:col-span-1 text-start">
                                 <div className="w-full flex flex-wrap gap-6 justify-start">
                                     {
-                                    setting.value.socialMedia ? Object.entries(setting.value.socialMedia as Record<string, { profileUrl: string }>).map(([key, value]) => {
-                                    const Icon = sosmedIcons[key]; 
-                                        return (
-                                            <a 
-                                                key={key} 
-                                                href={`https://${value.profileUrl}`} 
-                                                target="_blank" 
-                                                rel="noopener noreferrer"
-                                                className="flex justify-items-center w-fit items-center rounded-md bg-white p-3 hover:bg-black border-0 hover:border-2 hover:border-white group focus:ring-2 focus:ring-white transition-all transform duration-300 ease-in-out"
-                                            >
-                                                {Icon ? (
-                                                    <Icon className="w-6 h-6 lg:w-4 lg:h-4 rounded-sm text-black group-hover:text-white" />
-                                                ) : (
-                                                    <span className="text-white">{key}</span>
-                                                )}
-                                            </a>
-                                        );
-                                    }) : <></>
-                                }
+                                        setting.value.socialMedia ? Object.entries(setting.value.socialMedia as Record<string, { profileUrl: string }>).map(([key, value]) => {
+                                        const Icon = sosmedIcons[key]; 
+                                            return (
+                                                <a 
+                                                    key={key} 
+                                                    href={`https://${value.profileUrl}`} 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer"
+                                                    className="flex justify-items-center w-fit items-center rounded-md bg-white p-3 hover:bg-black border-0 hover:border-2 hover:border-white group focus:ring-2 focus:ring-white transition-all transform duration-300 ease-in-out"
+                                                >
+                                                    {Icon ? (
+                                                        <Icon className="w-6 h-6 lg:w-4 lg:h-4 rounded-sm text-black group-hover:text-white" />
+                                                    ) : (
+                                                        <span className="text-white">{key}</span>
+                                                    )}
+                                                </a>
+                                            );
+                                        }) : <p className="text-black text-center text-md dark:text-gray-400">[Sosial Media belum di atur]</p>
+                                    }
                                 </div>
                             </div>
                         </>

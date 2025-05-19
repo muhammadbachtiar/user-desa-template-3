@@ -9,7 +9,7 @@ export default function Article() {
 
   const backgroundStyle = setting?.value?.imageUrl 
     ? { backgroundImage: `url(${setting.value.imageUrl})` }
-    : { backgroundColor: '#f3f4f6' };
+    : { backgroundImage: `url(/images/unavailable-image.png)`};
 
   return (
     <section className="relative w-full flex justify-center items-center">
@@ -18,10 +18,6 @@ export default function Article() {
               isSettingLoading ? (
                   <div className="flex animate-pulse mb-4 col-span-8 w-full">
                     <div className="h-52 w-full flex-1 rounded-2xl bg-gray-200"></div>
-                  </div>
-              ) : isSettingError && !isSettingFetching && !setting || !setting.value ? (
-                  <div className="flex min-h-52 mb-4 justify-center items-center col-span-8 w-full">
-                    <p className="text-black text-center text-md dark:text-gray-400">Data tidak tersedia</p>
                   </div>
               ) : isSettingError && !isSettingFetching  ? (
                   <div className="flex min-h-52 justify-center items-center mb-4 col-span-8 w-full">
@@ -32,7 +28,7 @@ export default function Article() {
                     <div style={backgroundStyle} className={`relative bg-cover bg-bottom h-60 flex flex-col col-span-8 gap-2 mb-4 justify-items-center items-center`}>
                         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-30"></div>
                         <div className="relative h-full flex flex-col justify-center items-center px-8 md:px-24 xl:px-56 text-center py-16 lg:py-32 gap-4">
-                            <h2 className="self-center text-4xl text-white font-bold ">{setting.value.title}</h2>
+                            <h2 className="self-center text-4xl text-white font-bold ">{setting?.value?.title || "[Judul artikel belum diatur]"}</h2>
                             <Link href="/article" className="inline-flex justify-center hover:text-gray-900 items-center py-2 px-5 sm:ms-4 text-base font-medium text-center text-white rounded-lg border border-white hover:bg-gray-100 hover:border-gray-900 focus:ring-4 focus:ring-gray-400 transition transform duration-300 ease-in-out">
                                 Lihat selengkapnya
                             </Link> 

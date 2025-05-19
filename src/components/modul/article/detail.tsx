@@ -31,7 +31,7 @@ export default function ArticleDetailClient({ slug, initialData }: { slug: strin
 
   const showLoading = isLoadingArticle && shouldFetch || Object.keys(article || {}).length === 0;
   const showError = isErrorArticle && !isFetchingArticle && shouldFetch;
-  const showNoData = (showError && !article);
+  const showNoData = (!showError && !isFetchingArticle && !article);
 
   return (
     <AsideContent>

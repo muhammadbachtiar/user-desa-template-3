@@ -13,7 +13,7 @@ function useTour(params: Record<string, string | number> = {} ) {
         refetch,
       }  = useInfiniteQuery<ListTour, Error>({
         initialPageParam: null,
-        queryKey: ["articles", params],
+        queryKey: ["tours", params],
         queryFn: async ({ pageParam = null }) => {
           return await TourService.getAll(
                 { 

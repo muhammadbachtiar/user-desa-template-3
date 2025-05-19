@@ -10,7 +10,7 @@ function useTourDetail(params: Record<string, string | number> = {}, slug: strin
         isFetching,
         refetch,
       } = useQuery<{data: TourData}>({
-        queryKey: ["category", params],
+        queryKey: ["tour", params],
         queryFn: async () => {
           return await TourService.getOne(slug, params)
         },

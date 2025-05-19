@@ -10,7 +10,7 @@ function useStaticPage(params: Record<string, string | number> = {}, slug: strin
         isFetching,
         refetch,
       } = useQuery({
-        queryKey: ["static-page", slug, params],
+        queryKey: [`static-page-${slug}`, slug, params],
         queryFn: async () => {
           return await SettingService.getStaticPage(slug,params);
         },
