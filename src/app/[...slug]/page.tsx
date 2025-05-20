@@ -7,6 +7,7 @@ import Refetch from "@/components/shared/refetch";
 import useStaticPage from "@/hooks/settings/useStaticPage";
 import { use } from "react";
 import useSetting from "@/hooks/settings/useSettings";
+import Link from "next/link";
 
 function findMenuItemByPath(
   items: MenuWithContent,
@@ -38,9 +39,17 @@ export default function DynamicPage({ params }: DynamicPageProps & PageProps) {
   const { data: menu } = useSetting('menu', {});
   const path = unwrappedParams.slug || [];
   const menuItem = Array.isArray(menu?.value) ? findMenuItemByPath(menu.value, path) : null;
-
   const { data: staticPage, isLoading, isError, isFetching, refetch } = useStaticPage({}, menuItem?.staticPage || "");
-
+  
+   if (!isLoading && !isFetching && !staticPage) {
+    return <div className="flex flex-col items-center justify-center h-screen w-full text-gray-700">
+              <h1 className="text-4xl font-bold">404 - Page Not Found</h1>
+              <p className="mt-2 text-lg">Halaman yang kamu cari tidak ditemukan.</p>
+              <Link href="/" className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                Kembali ke Beranda
+              </Link>
+            </div>;
+  }
 
   return (
     <AsideContent>

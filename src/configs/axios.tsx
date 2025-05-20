@@ -22,6 +22,16 @@ axiosConfig.interceptors.request.use(
     }
 );
 
+axiosConfig.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response?.status === 404) {
+            return { data: null }; 
+        }
+        return Promise.reject(error);
+    }
+);
+
 export const axiosConfigPrivate = axios.create({
   baseURL: API_URL + API_PRIVATE_VERSION,
   headers: {
@@ -36,6 +46,16 @@ axiosConfigPrivate.interceptors.request.use(
   function (error) {
     return Promise.reject(error);
   }
+);
+
+axiosConfigPrivate.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response?.status === 404) {
+            return { data: null }; 
+        }
+        return Promise.reject(error);
+    }
 );
 
 export default axiosConfig;

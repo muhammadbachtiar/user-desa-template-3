@@ -25,7 +25,7 @@ function useArticle(params: Record<string, string | number> = {}, categoryId: nu
             );
         },
         getNextPageParam: (lastPage) => {
-            if (!lastPage.meta.next_page_url) {
+            if (!lastPage?.meta?.next_page_url) {
                 return undefined;
             }
             const url = new URL(lastPage.meta.next_page_url);

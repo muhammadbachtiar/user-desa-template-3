@@ -65,7 +65,7 @@ const Footer = () => {
                             <div className="col-span-4 lg:col-span-1 text-start">
                                 <div className="w-full flex flex-wrap gap-6 justify-start">
                                     {
-                                        setting.value.socialMedia ? Object.entries(setting.value.socialMedia as Record<string, { profileUrl: string }>).map(([key, value]) => {
+                                        setting?.value?.socialMedia ? Object.entries(setting.value.socialMedia as Record<string, { profileUrl: string }>).map(([key, value]) => {
                                         const Icon = sosmedIcons[key]; 
                                             return (
                                                 <a 

@@ -23,7 +23,7 @@ function useTour(params: Record<string, string | number> = {} ) {
             );
         },
         getNextPageParam: (lastPage) => {
-            if (!lastPage.meta.next_page_url) {
+            if (!lastPage?.meta?.next_page_url) {
                 return undefined;
             }
             const url = new URL(lastPage.meta.next_page_url);

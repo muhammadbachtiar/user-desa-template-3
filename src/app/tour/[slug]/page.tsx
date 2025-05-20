@@ -72,7 +72,7 @@ const TourDetail = () => {
             ) : (
                 <>
                     <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 h-full">
-                        <div className="lg:col-span-6 lg:sticky lg:top-0 lg:h-screen">
+                        <div className="lg:col-span-6 lg:sticky top-0 lg:h-screen ">
                             <div className="h-full w-full flex items-start justify-center p-3 lg:p-6">
                                 <div className="relative w-full h-full min-h-[300px] lg:min-h-[500px] rounded-xl overflow-hidden">
                                     {
@@ -121,7 +121,7 @@ const TourDetail = () => {
                                     <div className="flex items-center gap-x-2">
                                     <CiMap className="w-5 h-5 text-[#113F67]" />
                                     <a
-                                        href={tour?.link.gmap}
+                                        href={tour?.link?.gmap || ''}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-md text-gray-900 dark:text-white hover:font-bold transition-all"
@@ -137,25 +137,31 @@ const TourDetail = () => {
                                         rel="noopener noreferrer"
                                         className="text-md text-gray-900 dark:text-white hover:font-bold transition-all"
                                     >
-                                        {tour?.link.website}
+                                        {tour?.link?.website || '[Website tidak tersedia]'}
                                     </a>
                                     </div>
                                     <div className="flex items-center gap-x-2">
                                     <CgMail className="w-5 h-5 text-[#113F67]" />
                                     <a
-                                        href={`mailto:${tour?.link.email}`}
+                                        href={`mailto:${tour?.link?.email || ''}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-md text-gray-900 dark:text-white hover:font-bold transition-all"
                                     >
-                                        {tour?.link.email}
+                                        {tour?.link?.email ?? '[Email tidak tersedia]'}
                                     </a>
                                     </div>
                                 </div>
                                 <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
+                                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
+                                    <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
+                                      <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
+                                        <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
+                                          <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
+                                            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
                                 <div className="flex flex-wrap gap-4">
-                                    {tour?.link.sosmed &&
-                                        Object.entries(tour?.link.sosmed).map(([key, value]) => {
+                                    {tour?.link?.sosmed &&
+                                        Object.entries(tour?.link?.sosmed).map(([key, value]) => {
                                         const Icon = sosmedIcons[value.key]
                                         return (
                                         <a

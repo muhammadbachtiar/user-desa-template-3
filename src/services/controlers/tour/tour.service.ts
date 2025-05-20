@@ -5,6 +5,7 @@ const TourService = {
         const response = await axiosConfig.get("/tour", {
             params,
           });
+          console.log(response.data);
           return response.data;
     },
     

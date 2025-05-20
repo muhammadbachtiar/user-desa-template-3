@@ -15,7 +15,7 @@ const [search, setSearch] = useState('');
 
 const { data: setting, isLoading: isSettingLoading, isFetching: isSettingFetching, refetch: refetchSetting, isError: isSettingError } = useSetting("tour", {});
 const { data, isLoading, isFetching, hasNextPage, fetchNextPage, refetch, isError } = useTour({"search": search, 'page_size': 6});
-const allTour = data?.pages.flatMap(page => page.data) || [];
+const allTour = data?.pages?.flatMap(page => page?.data) || [];
 
 const backgroundStyle = setting?.value?.imageUrl 
     ? { backgroundImage: `url(${setting.value.imageUrl})` }
@@ -59,7 +59,7 @@ const backgroundStyle = setting?.value?.imageUrl
                         </div>
                     </div>
                     <div className="col-span-6 grid grid-cols-6 md:gap-x-4 gap-y-6 justify-items-center ">
-                        {isLoading || (allTour.length === 0 && isFetching)  ? (
+                        {isLoading || (allTour[0] ===undefined && isFetching)  ? (
                             <div className="col-span-6 grid grid-cols-12 w-full h-full justify-center gap-3">
                                {
                                 Array.from({ length: 6 }).map((_, index) => (
@@ -69,7 +69,7 @@ const backgroundStyle = setting?.value?.imageUrl
                                   ))                                  
                                }
                             </div>
-                        ) : !isError && !isFetching && allTour.length === 0 ? (
+                        ) : !isError && !isFetching && allTour[0] ===undefined ? (
                             <div className="flex col-span-6 w-full h-full justify-center">
                                 <div className="flex min-h-screen flex-col items-center justify-center gap-2">
                                     <p className="text-black text-2xl dark:text-gray-400">Wisata tidak tersedia</p>
@@ -90,7 +90,7 @@ const backgroundStyle = setting?.value?.imageUrl
                                             <div className="relative rounded-4xl overflow-hidden min-h-[68vh] flex justify-center items-end">
                                                 <Image
                                                     className="rounded-4xl absolute top-0 left-0 w-full min-w-full h-full object-cover group-hover:scale-110 group-focus:scale-110 transition duration-300 ease-in-out"
-                                                    src={card.thumbnail || ''}
+                                                    src={card?.thumbnail || '/images/unavailable-image.png'}
                                                     alt="Tour Thumbnail"
                                                     width={500}
                                                     height={300}
@@ -101,24 +101,24 @@ const backgroundStyle = setting?.value?.imageUrl
                                                 />
                                                 <div className="absolute bottom-0 left-0 w-full h-1/3 "></div>
                                                 <div className="relative bg-gradient-to-t from-black/70 via-black/55 to-black/0 rounded-b-4xl w-full p-6">
-                                                    <Link href={`/tour/${card.slug}`}>
+                                                    <Link href={`/tour/${card?.slug ?? ""}`} className="flex flex-col gap-2">
                                                         <h5 className="text-3xl md:text-4xl font-bold mb-5 tracking-tighter text-white dark:text-white hover:text-blue-600">{card.title}</h5>
                                                     </Link>
                                                     <div className="flex items-center mt-2">
-                                                        <p className="my-0 text-lg font-semibold text-white dark:text-white">{card.address}</p>
+                                                        <p className="my-0 text-lg font-semibold text-white dark:text-white">{card?.address ?? "[Alamat tidak tersedia]"}</p>
                                                     </div>
                                                     <div className="col-span-2 lg:col-span-1 text-start">
                                                         <div className="flex justify-start items-center gap-x-2">
                                                             <CiMap className="w-4 h-4 rounded-sm text-white"></CiMap>
-                                                            <a href={card.link.gmap} target="blank" className="text-md font-normal mb-0 text-white dark:text-white hover:font-bold ">Lokasi</a>
+                                                            <a href={card?.link?.gmap || ''} target="blank" className="text-md font-normal mb-0 text-white dark:text-white hover:font-bold ">Lokasi</a>
                                                         </div>
                                                         <div className="flex justify-start items-center gap-x-2">
                                                             <BiGlobe className="w-4 h-4 rounded-sm text-white"></BiGlobe>
-                                                            <a href={card.link.website} target="blank" className="text-md font-normal mb-0 text-white dark:text-white">{card.link.website}</a>
+                                                            <a href={card?.link?.website || ''} target="blank" className="text-md font-normal mb-0 text-white dark:text-white">{card?.link?.website ?? ''}</a>
                                                         </div>
                                                         <div className="flex justify-start items-center gap-x-2">
                                                             <CgMail className="w-4 h-4 rounded-sm text-white"></CgMail>
-                                                            <a href={card.link.email} target="blank" className="text-md font-normal mb-0 text-white dark:text-white">{card.link.email}</a>
+                                                            <a href={card?.link?.email || ''} target="blank" className="text-md font-normal mb-0 text-white dark:text-white">{card?.link?.email ?? ''}</a>
                                                         </div>
                                                     </div>
                                                 </div>
