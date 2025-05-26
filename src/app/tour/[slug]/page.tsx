@@ -60,7 +60,7 @@ const TourDetail = () => {
             ) : !isErrorTour && !isFetchingTour && (!tour || Object.keys(tour || {}).length === 0) ? (
                 <div className="flex w-full h-full justify-center">
                     <div className="flex min-h-screen flex-col items-center justify-center gap-2">
-                        <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+                        <p className="text-black text-2xl dark:text-gray-400 text-center">Data tidak tersedia</p>
                     </div>
                 </div>
             ) : isErrorTour && !isFetchingTour  ? (
@@ -101,10 +101,10 @@ const TourDetail = () => {
                             <div className="flex flex-col gap-y-6">
                                 <div>
                                     <h1 className="text-3xl md:text-4xl font-bold tracking-tighter text-gray-900 dark:text-white mb-2">
-                                    {tour?.title}
+                                        {tour?.title}
                                     </h1>
                                     <div className="flex items-center">
-                                    <p className="text-lg font-semibold text-gray-900 dark:text-white">{tour?.address}</p>
+                                        <p className="text-sm sm:text-md md:text-lg font-semibold text-gray-900 dark:text-white">{tour?.address}</p>
                                     </div>
                                 </div>
                                 <div className="relative aspect-video w-full overflow-hidden rounded-xl shadow-lg">
@@ -153,12 +153,6 @@ const TourDetail = () => {
                                     </div>
                                 </div>
                                 <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
-                                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
-                                    <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
-                                      <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
-                                        <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
-                                          <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
-                                            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">{tour?.description}</p>
                                 <div className="flex flex-wrap gap-4">
                                     {tour?.link?.sosmed &&
                                         Object.entries(tour?.link?.sosmed).map(([key, value]) => {

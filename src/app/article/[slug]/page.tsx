@@ -12,9 +12,9 @@ interface DynamicPageProps {
 let article: ArticleData;
 
 export async function generateMetadata({ params }: DynamicPageProps & PageProps): Promise<Metadata> {
-
+  const { slug } = await params || {};
   try {
-    const articleResponse = await ArticleService.getOne(params.slug || '', { with: "user,category" })
+    const articleResponse = await ArticleService.getOne(slug ?? '', { with: "user,category" })
      article = articleResponse.data
 
     return formatMetadata({ ...article, type: "article" }, { siteName: "Website Desa" })
@@ -26,10 +26,11 @@ export async function generateMetadata({ params }: DynamicPageProps & PageProps)
   }
 }
 
-export default function ArticleDetailPage({ params }: DynamicPageProps & PageProps) {
+export default async function ArticleDetailPage({ params }: DynamicPageProps & PageProps) {
+ const {slug} = await params || {};
   return (
     <div className="min-h-screen w-full">
-      <ArticleDetailClient slug={params.slug || ''} initialData={article}  />
+      <ArticleDetailClient slug={slug} initialData={article}  />
     </div>
   )
 }

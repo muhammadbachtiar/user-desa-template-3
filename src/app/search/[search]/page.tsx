@@ -1,5 +1,5 @@
 'use client'
-import getListArticle from "@/hooks/contents/article/useList";
+
 import { PageProps } from "../../../../.next/types/app/search/[search]/page";
 import { use, useState } from "react";
 import Refetch from "@/components/shared/refetch";
@@ -8,6 +8,7 @@ import useInfografis from "@/hooks/contents/infografis/useInfografis";
 import { Infografis } from "@/services/controlers/infografis/type";
 import Link from "next/link";
 import LightboxImage from "@/components/shared/Lightbox";
+import useArticle from "@/hooks/contents/article/useList";
 
 
 interface DynamicPageProps {
@@ -18,7 +19,7 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
     const unwrappedParams = use(params);
     const [searchValue, setSearchValue] = useState(unwrappedParams.search || '');
 
-    const { data: articles, isLoading: IsArticleLoading, isFetching:IsArticleFetching, refetch:refetchArticle, isError:isArticleError} = getListArticle({"search": searchValue});
+    const { data: articles, isLoading: IsArticleLoading, isFetching:IsArticleFetching, refetch:refetchArticle, isError:isArticleError} = useArticle({"search": searchValue, "page_size": 6});
     const { data: tour, isLoading: isTourLoading, isFetching: isTourFetching, refetch: refetchTour, isError: isTourError } = useTour({"search": searchValue});
     const { data: infografis, isLoading: isInfografisLoading, isFetching: isInfografisFetching, refetch: refetchInfografis, isError: isInfografisError } = useInfografis({"search": searchValue});
 
@@ -72,19 +73,19 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
                         </div>
                          <div className="col-span-6">  
                             <dl className="text-gray-900 divide-y divide-gray-100 dark:text-white dark:divide-gray-700">
-                                {IsArticleLoading || (IsArticleFetching || (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0)) ? (
-                                Array.from({ length: 4 }).map((_, index) => (
-                                    <div
-                                    key={index}
-                                    className="flex flex-col py-3 animate-pulse bg-gray-50 hover:bg-gray-100"
-                                    >
-                                    <dd className="h-6 bg-gray-200 rounded w-3/4 mb-2"></dd>
-                                    <dt className="h-4 bg-gray-200 rounded w-1/2"></dt>
-                                    </div>
-                                ))
+                                { IsArticleLoading || (IsArticleFetching || (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0)) && isArticleError ? (
+                                     Array.from({ length: 4 }).map((_, index) => (
+                                        <div
+                                        key={index}
+                                        className="flex flex-col py-3 animate-pulse bg-gray-50 hover:bg-gray-100"
+                                        >
+                                        <dd className="h-6 bg-gray-200 rounded w-3/4 mb-2"></dd>
+                                        <dt className="h-4 bg-gray-200 rounded w-1/2"></dt>
+                                        </div>
+                                    ))
                                 ) : !isArticleError && !IsArticleFetching && (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0) ? (
                                 <div className="flex flex-col items-center justify-center py-12">
-                                    <p className="text-black text-2xl dark:text-gray-400">Artikel tidak tersedia</p>
+                                    <p className="text-black text-2xl dark:text-gray-400 text-center">Artikel tidak ditemukan</p>
                                 </div>
                                 ) : isArticleError && !IsArticleFetching ? (
                                 <div className="flex flex-col items-center justify-center py-12">
@@ -99,9 +100,9 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
                                                 } hover:bg-gray-100 transition-colors duration-200`}
                                                 >
                                                 <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">
-                                                    <span className="block">{article.title}</span>
+                                                    <span className="block font-semibold text-gray-900">{article.title}</span>
                                                 </dt>
-                                                <dd className="text-lg font-semibold text-gray-900 dark:text-white">
+                                                <dd className="text-mb text-gray-500 line-clamp-3 dark:text-white">
                                                     {article.description}
                                                 </dd>
                                             </div>
@@ -131,7 +132,7 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
                                 ))
                                 ) : !isInfografisFetching && (!infografis || infografis.length === 0) ? (
                                 <div className="flex flex-col items-center justify-center py-12">
-                                    <p className="text-black text-2xl dark:text-gray-400">Infografis tidak tersedia</p>
+                                    <p className="text-black text-2xl dark:text-gray-400 text-center">Infografis tidak ditemukan</p>
                                 </div>
                                 ) : isInfografisError && !isInfografisFetching ? (
                                 <div className="flex flex-col items-center justify-center py-12">
@@ -140,22 +141,22 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
                                 ) : (
                                 <>
                                     {
-                                    infografis.map((infografis: Infografis , index:number) => (
-                                        <div 
-                                        key={infografis.id}
-                                        onClick={()=> {setIsOpen(true); setCurrentIndex(index)}}
-                                        className={`flex flex-col py-3 ${
-                                            index % 2 === 0 ? 'bg-gray-50' : ''
-                                        } hover:bg-gray-100 transition-colors duration-200`}
-                                        >
-                                            <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">
-                                                <span className="block">{infografis.title}</span>
-                                            </dt>
-                                            <dd className="text-lg font-semibold text-gray-900 dark:text-white">
-                                                {infografis.description}
-                                            </dd>
-                                        </div>
-                                    ))
+                                        infografis.map((infografis: Infografis , index:number) => (
+                                            <div 
+                                            key={infografis.id}
+                                            onClick={()=> {setIsOpen(true); setCurrentIndex(index)}}
+                                            className={`flex flex-col py-3 ${
+                                                index % 2 === 0 ? 'bg-gray-50' : ''
+                                            } hover:bg-gray-100 transition-colors duration-200`}
+                                            >
+                                                <dt className="mb-1 font-semibold text-gray-900 md:text-lg dark:text-gray-400">
+                                                    <span className="block">{infografis.title}</span>
+                                                </dt>
+                                                <dd className="text-mb text-gray-500 line-clamp-3 dark:text-white">
+                                                    {infografis.description}
+                                                </dd>
+                                            </div>
+                                        ))
                                     }
                                    <LightboxImage data={infografis} isOpen={isOpen} currentIndex={currentIndex} setIsOpen={setIsOpen} />
                                 </>
@@ -183,7 +184,7 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
                                     ))
                                     ) : !isTourFetching && tour?.pages[0]?.data.length === 0 ? (
                                         <div className="flex flex-col items-center justify-center py-12">
-                                            <p className="text-black text-2xl dark:text-gray-400">Wisata tidak tersedia</p>
+                                            <p className="text-black text-2xl dark:text-gray-400 text-center">Wisata tidak ditemukan</p>
                                         </div>
                                     ) : isTourError && !isTourFetching ? (
                                         <div className="flex flex-col items-center justify-center py-12">
@@ -197,10 +198,10 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
                                                 index % 2 === 0 ? 'bg-gray-50' : ''
                                             } hover:bg-gray-100 transition-colors duration-200`}
                                             >
-                                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">
+                                                <dt className="mb-1 font-semibold text-gray-900 md:text-lg dark:text-gray-400">
                                                     <span className="block">{tour.title}</span>
                                                 </dt>
-                                                <dd className="text-lg font-semibold text-gray-900 dark:text-white">
+                                                <dd className="text-mb text-gray-500 line-clamp-3 dark:text-white">
                                                     {tour.description}
                                                 </dd>
                                             </div>

@@ -29,7 +29,7 @@ export default function RootLayout({
         <ClientWrapper>
           <div className="min-h-screen min-w-full bg-primary flex flex-col justify-between items-start w-full overflow-x-hidden">
                 <Header/>
-                  <div className="flex w-full border-gray-200 justify-center items-center pb-8 mx-auto md:px-14 p-3">
+                  <div className="flex w-full border-gray-200 justify-center items-center pb-8 mx-auto md:px-12 lg:px-14 p-3">
                     <main className="flex w-full flex-col gap-[56px] row-start-2 items-center sm:items-start">
                       {children}
                     </main>

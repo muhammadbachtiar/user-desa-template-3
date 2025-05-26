@@ -61,7 +61,7 @@ export default function ArticleDetailClient({ slug, initialData }: { slug: strin
       ) : showNoData ? (
         <div className="flex w-full h-full justify-center">
           <div className="flex min-h-screen flex-col items-center justify-center gap-2">
-            <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+            <p className="text-black text-2xl dark:text-gray-400 text-center">Data tidak tersedia</p>
           </div>
         </div>
       ) : showError ? (

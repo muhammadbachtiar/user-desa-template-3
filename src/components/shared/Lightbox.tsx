@@ -27,12 +27,12 @@ const LightboxImage = ({ data = [], isOpen, setIsOpen, currentIndex }: LightboxP
             images={transformedInfografisData}
             currentIndex={currentIndex}
             renderHeader={() => (
-                <div className="flex w-full justify-between px-3 py-1 items-center">
-                    <h1 className="text-lg font-semibold text-center leading-none tracking-tight">
+                <div className="text-md sm:text-lg font-semibold flex w-full bg-black/20 justify-between px-3 py-1 items-center">
+                    <h1 className="text-center leading-none tracking-tight">
                         {transformedInfografisData[currentIndex]?.title || "Title Not Available"}
                     </h1>
                     <button 
-                    className="transparent text-white text-md p-3 rounded-md transition duration-200 ease-in-out 
+                    className="bg-transparent text-white text-md p-3 rounded-md transition duration-200 ease-in-out 
                                 hover:bg-gray-200 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400" 
                     onClick={() => { setIsOpen(false); }}
                     >

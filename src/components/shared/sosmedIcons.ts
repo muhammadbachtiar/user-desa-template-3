@@ -1,7 +1,8 @@
-import { FaFacebook, FaInstagram, FaXTwitter, FaLinkedin, FaThreads, FaTiktok, FaYoutube } from "react-icons/fa6";
+import { FaFacebook, FaInstagram, FaXTwitter, FaLinkedin, FaThreads, FaTiktok, FaYoutube, FaQuestion } from "react-icons/fa6";
 import type { IconType } from "react-icons";
 
 interface SocialMediaIcons {
+  FaQuestion: IconType
   Facebook: IconType
   Instagram: IconType
   X: IconType
@@ -14,6 +15,7 @@ interface SocialMediaIcons {
 
 
 const sosmedIcons: SocialMediaIcons = {
+    FaQuestion: FaQuestion,
     Facebook: FaFacebook,
     Instagram: FaInstagram,
     X: FaXTwitter,

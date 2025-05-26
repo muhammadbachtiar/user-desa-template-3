@@ -22,13 +22,13 @@ const ArticleDetail = () => {
             ) : isErrorArticle && !isFetchingArticle && !enterprise || Object.keys(enterprise.value || {}).length === 0 ? (
                 <div className="flex w-full h-full justify-center">
                     <div className="flex min-h-screen flex-col items-center justify-center gap-2">
-                        <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+                        <p className="text-black text-2xl dark:text-gray-400 text-center">Data tidak tersedia</p>
                     </div>
                 </div>
             ) : isErrorArticle && !isFetchingArticle  ? (
                 <div className="w-full h-full flex justify-center">
                     <div className="flex min-h-screen flex-col items-center justify-center gap-2">
-                        <p className="text-black text-2xl dark:text-gray-400">Terjadi kesalahan, silakan ulangi</p>
+                        <p className="text-black text-2xl dark:text-gray-400 text-center">Terjadi kesalahan, silakan ulangi</p>
                         <Button
                             size="sm"
                             onClick={() => {

@@ -13,13 +13,13 @@ export default function AsideContent({ children }: { children: React.ReactNode})
     const { data: articles, isLoading, isFetching, refetch, isError} = useArticle({"page_size": 4});
 
   return (
-    <div className="flex flex-col md:flex-row w-full">
+    <div className="flex flex-col items-stretch md:flex-row w-full">
       <main className="flex-1 min-w-0">
-      <div className="space-y-6">
-        <div className="mb-8">
-          {children}
+        <div className="space-y-6">
+          <div className="mb-8">
+            {children}
+          </div>
         </div>
-      </div>
       </main>
       <aside className="w-full md:w-72 lg:w-96 md:sticky md:top-0 md:self-start h-fit bg-white sm:p-4 border-gray-300 md:border-l">
         <div className="space-y-6">
@@ -51,19 +51,19 @@ export default function AsideContent({ children }: { children: React.ReactNode})
                 ) : (
                   articles?.pages[0].data.map((article) => (
                     <Link key={article.id} href={`/article/${article.slug}`}>
-                      <li className="flex">
-                        <div className="mr-3 min-w-32 relative group mb-3">
+                      <li className="flex my-2">
+                        <div className="mr-3 max-w-40 min-w-40 md:max-w-32 md:min-w-32 w-full relative group">
                             <Image
-                                className="w-40 md:w-30 rounded-sm shadow-lg object-cover"
+                                className="max-w-40 md:max-w-32 max-h-24 h-full w-full rounded-sm shadow-lg object-cover"
                                 src={article.thumbnail || ""}
                                 alt="Article Thumbnail"
                                 width={1200}
                                 height={720}
                                 priority 
                                 />
-                            <div className="absolute w-40 md:w-30 inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out" />
+                            <div className="absolute w-40 md:w-32 inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out" />
                         </div>
-                        <h5 className="text-md font-semibold hover:text-blue-500 ">
+                        <h5 className="text-md line-clamp-4 lg:line-clamp-3 font-semibold hover:text-blue-500 ">
                           {article.title}
                         </h5>
                       </li>

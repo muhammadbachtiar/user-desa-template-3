@@ -10,8 +10,8 @@ import Refetch from "../../shared/refetch";
 
 const BasicInformation = () => {
   
-   const { data: welcomeMessage, isLoading: isWellcomeMessageLoading, isFetching: isWellcomeMessageFetching, refetch: refetchWelcomeMessage, isError: isWellcomeMessageError } = useStaticPage({}, "wellcome-message");
-    const { data: villageProgram, isLoading: isvillageProgramLoading, isFetching: isvillageProgramFetching, refetch: refetchVillageProgram, isError: isvillageProgramError } = useStaticPage({}, "village-program");
+   const { data: welcomeMessage, isLoading: isWellcomeMessageLoading, isFetching: isWellcomeMessageFetching, refetch: refetchWelcomeMessage, isError: isWellcomeMessageError } = useStaticPage({}, `wellcome-message-${process.env.NEXT_PUBLIC_VILLAGE_ID}`);
+    const { data: villageProgram, isLoading: isvillageProgramLoading, isFetching: isvillageProgramFetching, refetch: refetchVillageProgram, isError: isvillageProgramError } = useStaticPage({}, `village-program-${process.env.NEXT_PUBLIC_VILLAGE_ID}`);
 
     return (
         <div className="w-full dark:bg-gray-700 rounded-2xl min-h-[400px] flex flex-col items-start space-y-6">
@@ -207,7 +207,7 @@ const BasicInformation = () => {
                     ) : isvillageProgramError && !isWellcomeMessageFetching && !villageProgram || !villageProgram ? (
                         <div className="flex col-span-6 w-full min-h-[400px] justify-center">
                             <div className="flex flex-col items-center justify-center gap-2">
-                                <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+                                <p className="text-black text-2xl dark:text-gray-400 text-center">Data tidak tersedia</p>
                             </div>
                         </div>
                     ) : isvillageProgramError && !isWellcomeMessageFetching  ? (
@@ -232,7 +232,7 @@ const BasicInformation = () => {
                     ) : isWellcomeMessageError && !isvillageProgramFetching && !welcomeMessage || !welcomeMessage? (
                         <div className="flex col-span-6 w-full min-h-[400px] justify-center">
                             <div className="flex flex-col items-center justify-center gap-2">
-                                <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+                                <p className="text-black text-2xl dark:text-gray-400 text-center">Data tidak tersedia</p>
                             </div>
                         </div>
                     ) : isWellcomeMessageError && !isvillageProgramFetching  ? (

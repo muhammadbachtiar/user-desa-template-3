@@ -1,68 +1,103 @@
 "use client"
 
-import { useEffect } from "react"
-import "@n8n/chat/style.css"
-import "./chatbot.css"
-import { createChat } from "@n8n/chat"
+import dynamic from 'next/dynamic';
+
+const BubbleChat = dynamic(() => import('flowise-embed-react').then(mod => mod.BubbleChat), { ssr: false });
+
 
 const Chatbot = () => {
-  const base64 = btoa(
-    `${process.env.NEXT_PUBLIC_LABAHSA_CHATBOT_USERNAME}:${process.env.NEXT_PUBLIC_LABAHSA_CHATBOT_PASSWORD}`,
+
+  return (
+     <BubbleChat
+            chatflowid={process.env.NEXT_PUBLIC_CHATBOT_ID ?? ''}
+            apiHost={process.env.NEXT_PUBLIC_CHATBOT_BASE_URL ?? ''}
+             theme={{    
+                button: {
+                    backgroundColor: '#3B81F6',
+                    right: 20,
+                    bottom: 70,
+                    size: 48,
+                    dragAndDrop: true,
+                    iconColor: 'white',
+                    autoWindowOpen: {
+                        autoOpen: true,
+                        openDelay: 2,
+                        autoOpenOnMobile: false
+                    }
+                },
+                disclaimer: {
+                    title: 'Disclaimer',
+                    message: "Dengan menggunaknan chatbot ini, kamu menyetujui <a target=\"_blank\" href=\"https://flowiseai.com/terms\">syarat dan ketentuan</a>",
+                    textColor: 'black',
+                    buttonColor: '#3b82f6',
+                    buttonText: 'Mulai percakapan',
+                    buttonTextColor: 'white',
+                    denyButtonText: 'Tutup',
+                    blurredBackgroundColor: 'rgba(0, 0, 0, 0.4)',
+                    backgroundColor: 'white'
+                },
+                customCSS: ``,
+                chatWindow: {
+                    showTitle: true,
+                    showAgentMessages: true,
+                    title: 'Aruna',
+                    titleAvatarSrc: '/images/aruna-profile.png',
+                    welcomeMessage: 'Hallo saya aruna, asisten virtual anda. Silahkan bertanya kepada saya.',
+                    errorMessage: 'This is a custom error message',
+                    backgroundColor: '#ffffff',
+                    backgroundImage: 'enter image path or link',
+                    width: 400,
+                    fontSize: 16,
+                    starterPrompts: [
+                        "Apa yang bisa kamu lakukan?",
+                        "Kamu siapa?",
+                    ],
+                    starterPromptFontSize: 15,
+                    clearChatOnReload: false,
+                    sourceDocsTitle: 'Sources:',
+                    renderHTML: true,
+                    botMessage: {
+                        backgroundColor: '#f7f8ff',
+                        textColor: '#303235',
+                        showAvatar: true,
+                        avatarSrc: '/images/aruna-profile.png'
+                    },
+                    userMessage: {
+                        backgroundColor: '#3B81F6',
+                        textColor: '#ffffff',
+                        showAvatar: true,
+                        avatarSrc: 'https://raw.githubusercontent.com/zahidkhawaja/langchain-chat-nextjs/main/public/usericon.png'
+                    },
+                    textInput: {
+                        placeholder: 'Apa pertanyaan anda?',
+                        backgroundColor: '#ffffff',
+                        textColor: '#303235',
+                        sendButtonColor: '#3B81F6',
+                        maxChars: 50,
+                        maxCharsWarningMessage: 'Batas karakter 50',
+                        autoFocus: true,
+                        sendMessageSound: true,
+                        sendSoundLocation: 'send_message.mp3',
+                        receiveMessageSound: true,
+                        receiveSoundLocation: 'receive_message.mp3'
+                    },
+                    feedback: {
+                        color: '#303235'
+                    },
+                    dateTimeToggle: {
+                        date: true,
+                        time: true
+                    },
+                    footer: {
+                        textColor: '#303235',
+                        text: 'Aruna MEMBARA - Asisten Virtual',
+                        company: 'Muara Enim',
+                        companyLink: 'https://muaraenimkab.go.id/'
+                    }
+                }
+            }}
+        />
   )
-
-  useEffect(() => {
-    createChat({
-      webhookUrl: `${process.env.NEXT_PUBLIC_LABAHSA_CHATBOT_BASE_URL}`,
-      webhookConfig: {
-        method: "POST",
-        headers: {
-          Authorization: `Basic ${base64}`,
-          "Content-Type": "application/json",
-        },
-      },
-      initialMessages: ["Hi, saya Aruna. Ada yang bisa saya bantu?"],
-      i18n: {
-        en: {
-          title: "Aruna",
-          subtitle: "",
-          footer: "",
-          getStarted: "Percakapan baru",
-          inputPlaceholder: "Ketik pertanyaan anda disini...",
-          closeButtonTooltip: "",
-        },
-      },
-    })
-
-    setTimeout(() => {
-      const chatHeading = document.querySelector(".chat-heading")
-      if (chatHeading) {
-        chatHeading.innerHTML = ""
-
-        const profileImg = document.createElement("img")
-        profileImg.src = "/images/aruna-profile.png"
-        profileImg.alt = "Aruna"
-        profileImg.className = "chat-profile-img"
-
-        const title = document.createElement("div")
-        title.className = "chat-title-container"
-
-        const h1 = document.createElement("h1")
-        h1.textContent = "Aruna"
-
-        const subtitle = document.createElement("p")
-        subtitle.className = "chat-subtitle"
-        subtitle.textContent = "Asisten AI"
-
-        title.appendChild(h1)
-        title.appendChild(subtitle)
-
-        chatHeading.appendChild(profileImg)
-        chatHeading.appendChild(title)
-      }
-    }, 500) 
-  }, [base64])
-
-  return <div></div>
 }
 
 export default Chatbot

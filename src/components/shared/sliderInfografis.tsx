@@ -159,8 +159,8 @@ return (
                     </div>
                 ))
                 ) : !isError && !isFetching && (!data || data.length === 0) ? (
-                    <div className="flex min-h-52 mb-4 justify-center items-center col-span-8 w-full">
-                      <p className="text-black text-center text-md dark:text-gray-400">Infografis tidak tersedia</p>
+                    <div className="mb-4 col-span-8 w-full">
+                      <p className="text-black text-md min-h-52 flex items-center justify-center dark:text-gray-400">Infografis tidak tersedia</p>
                     </div>
                 ) : isError && !isFetching  ? (
                     <div className="flex min-h-52 justify-center items-center mb-4 col-span-8 w-full">
@@ -170,7 +170,7 @@ return (
                   data.map((card: Infografis, index:number) => {
                       return (
                         <div key={card.slug} tabIndex={1}  onClick={()=> {setIsOpen(true); setCurrentIndex(index)}}>
-                          <div className="relative px-2 group hover:scale-100 focus:scale-100 transition duration-300 ease-in-out"> 
+                          <div className="relative lg:px-2 group hover:scale-100 focus:scale-100 transition duration-300 ease-in-out"> 
                               <div className="relative flex justify-center overflow-hidden w-full h-full group rounded-2xl">
                                 <Image
                                     className="h-full w-full min-w-full md:min-h-96 object-cover transform group-hover:scale-110 group-focus:scale-110 transition duration-300 ease-in-out"

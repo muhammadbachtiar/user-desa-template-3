@@ -42,7 +42,7 @@ export default function DynamicPage({ params }: DynamicPageProps & PageProps) {
   const { data: staticPage, isLoading, isError, isFetching, refetch } = useStaticPage({}, menuItem?.staticPage || "");
   
    if (!isLoading && !isFetching && !staticPage) {
-    return <div className="flex flex-col items-center justify-center h-screen w-full text-gray-700">
+    return <div className="flex flex-col text-center items-center justify-center h-screen w-full text-gray-700">
               <h1 className="text-4xl font-bold">404 - Page Not Found</h1>
               <p className="mt-2 text-lg">Halaman yang kamu cari tidak ditemukan.</p>
               <Link href="/" className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
@@ -73,7 +73,7 @@ export default function DynamicPage({ params }: DynamicPageProps & PageProps) {
       ) : !isError && !isFetching && !staticPage?.content ? (
           <div className="flex col-span-6 w-full h-full justify-center">
               <div className="flex min-h-screen flex-col items-center justify-center gap-2">
-                  <p className="text-black text-2xl dark:text-gray-400">Data tidak tersedia</p>
+                  <p className="text-black text-2xl dark:text-gray-400 text-center">Data tidak tersedia</p>
               </div>
           </div>
       ) : isError && !isFetching  ? (

@@ -6,9 +6,9 @@ import Refetch from '../shared/refetch';
 
 export default function Profile() {
 
-  const { data: welcomeMessage, isLoading: isWellcomeMessageLoading, isFetching: isWellcomeMessageFetching, refetch: refetchWelcomeMessage, isError: isWellcomeMessageError } = useStaticPage({}, "wellcome-message");
-  const { data: villageProgram, isLoading: isvillageProgramLoading, isFetching: isvillageProgramFetching, refetch: refetchVillageProgram, isError: isvillageProgramError } = useStaticPage({}, "village-program");
-
+  const { data: welcomeMessage, isLoading: isWellcomeMessageLoading, isFetching: isWellcomeMessageFetching, refetch: refetchWelcomeMessage, isError: isWellcomeMessageError } = useStaticPage({}, `wellcome-message-${process.env.NEXT_PUBLIC_VILLAGE_ID}`);
+  const { data: villageProgram, isLoading: isvillageProgramLoading, isFetching: isvillageProgramFetching, refetch: refetchVillageProgram, isError: isvillageProgramError } = useStaticPage({}, `village-program-${process.env.NEXT_PUBLIC_VILLAGE_ID}`);
+  
   const TabListName = [
     {
       name: 'Kata Sambutan',
@@ -18,7 +18,7 @@ export default function Profile() {
                     ) : !isWellcomeMessageError && !isvillageProgramFetching && !welcomeMessage? (
                         <div className="flex col-span-6 w-full min-h-[400px] justify-center">
                             <div className="flex flex-col items-center justify-center gap-2">
-                                <p className="text-black text-2xl dark:text-gray-400">Kata sambutan tidak tersedia</p>
+                                <p className="text-black text-2xl dark:text-gray-400 text-center">Kata sambutan tidak tersedia</p>
                             </div>
                         </div>
                     ) : isWellcomeMessageError && !isvillageProgramFetching  ? (
@@ -27,7 +27,7 @@ export default function Profile() {
                         </div>
                     ) : (
                       <RichTextContent 
-                        content={welcomeMessage.content} 
+                        content={welcomeMessage?.content ?? 'Kata sambutan tidak tersedia'} 
                         className="px-4 py-4 md:px-16" 
                       />
                     )}
@@ -41,7 +41,7 @@ export default function Profile() {
                     ) : !isvillageProgramError && !isWellcomeMessageFetching && !villageProgram  ? (
                         <div className="flex col-span-6 w-full min-h-[400px] justify-center">
                             <div className="flex flex-col items-center justify-center gap-2">
-                                <p className="text-black text-2xl dark:text-gray-400">Program desa tidak tersedia</p>
+                                <p className="text-black text-2xl dark:text-gray-400 text-center">Program desa tidak tersedia</p>
                             </div>
                         </div>
                     ) : isvillageProgramError && !isWellcomeMessageFetching  ? (
@@ -50,7 +50,7 @@ export default function Profile() {
                         </div>
                     ) : (
                       <RichTextContent 
-                        content={villageProgram.content} 
+                        content={villageProgram?.content ?? 'Program desa tidak tersedia'} 
                         className="px-4 py-4 md:px-16" 
                        />
                     )}
