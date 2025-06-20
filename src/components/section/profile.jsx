@@ -34,14 +34,14 @@ export default function Profile() {
               </div>
     },
     {
-      name: 'Program Desa',
+      name: 'Program',
       content: <div style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' }} className="bg-gray-50 dark:bg-gray-700 rounded-2xl min-h-[400px]  max-h-screen overflow-y-scroll">
                     {isWellcomeMessageLoading || isvillageProgramFetching && !villageProgram? (
                         <></>
                     ) : !isvillageProgramError && !isWellcomeMessageFetching && !villageProgram  ? (
                         <div className="flex col-span-6 w-full min-h-[400px] justify-center">
                             <div className="flex flex-col items-center justify-center gap-2">
-                                <p className="text-black text-2xl dark:text-gray-400 text-center">Program desa tidak tersedia</p>
+                                <p className="text-black text-2xl dark:text-gray-400 text-center">Program tidak tersedia</p>
                             </div>
                         </div>
                     ) : isvillageProgramError && !isWellcomeMessageFetching  ? (
@@ -50,7 +50,7 @@ export default function Profile() {
                         </div>
                     ) : (
                       <RichTextContent 
-                        content={villageProgram?.content ?? 'Program desa tidak tersedia'} 
+                        content={villageProgram?.content ?? 'Program tidak tersedia'} 
                         className="px-4 py-4 md:px-16" 
                        />
                     )}
