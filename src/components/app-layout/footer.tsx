@@ -16,7 +16,7 @@ const Footer = () => {
                     {
                         isSettingLoading || (isSettingFetching && !setting?.value) ? (
                             <>
-                                 <div className="animate-pulse grid col-span-4 lg:col-span-3 grid-cols-4 gap-4 p-6">
+                                <div className="animate-pulse grid col-span-4 lg:col-span-3 grid-cols-4 gap-4 p-6">
                                         <div className="col-span-4 lg:col-span-2 flex flex-col gap-2">
                                             <div className="flex items-center gap-x-2">
                                             <div className="h-4 w-4 bg-gray-300 rounded"></div>
@@ -73,7 +73,7 @@ const Footer = () => {
                                                     href={`${value.profileUrl}`} 
                                                     target="_blank" 
                                                     rel="noopener noreferrer"
-                                                    className="flex justify-items-center w-fit items-center rounded-md bg-white p-3 hover:bg-black border-0 hover:border-2 hover:border-white group focus:ring-2 focus:ring-white transition-all transform duration-300 ease-in-out"
+                                                    className="flex justify-items-center w-fit items-center rounded-md bg-white p-3 hover:bg-black border-0 hover:border-white group focus:ring-2 focus:ring-white transition-all transform duration-300 ease-in-out"
                                                 >
                                                     <Icon className="w-6 h-6 lg:w-4 lg:h-4 rounded-sm text-black group-hover:text-white" />
                                                 </a>
