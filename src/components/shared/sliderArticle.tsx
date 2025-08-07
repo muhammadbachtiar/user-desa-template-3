@@ -51,6 +51,7 @@ function SamplePrevArrow(props: SliderButtonProps) {
 }  
     
 const settings = {
+    centerMode:false,
     dots: true,
     infinite: isInfinite,
     speed: 500,

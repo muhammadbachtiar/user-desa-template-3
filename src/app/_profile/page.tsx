@@ -53,7 +53,7 @@ const tabList = [
             ) : (
                 <section style={backgroundStyle} className={`relative rounded-md p-4 lg:p-8 bg-cover bg-bottom w-full h-44 md:h-60 lg:h-80 flex justify-start items-end`}>
                     <div className="absolute inset-0 bg-black/50 rounded-md"></div>
-                    <div className="relative z-10 px-0 sm:px-8  text-start">
+                    <div className="z-10 w-full text-start px-6 sm:px-0 max-w-lg md:max-w-3xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl">
                         <h2 className="mb-2 text-3xl md:text-5xl font-bold text-white lg:text-6xl">{setting.value.title}</h2>
                         <p className="sm:mb-2 text-sm sm:text-md font-light tracking-tight text-white">{setting.value.description}</p>
                     </div>
