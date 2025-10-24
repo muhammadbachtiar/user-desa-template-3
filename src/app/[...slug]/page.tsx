@@ -54,17 +54,8 @@ export async function generateMetadata({
     ? findMenuItemByPath(menu.value, path)
     : null;
   try {
-    const menuData = await SettingService.getStaticPage(
-      menuItem?.staticPage || ""
-    );
-    return formatMetadata(
-      { ...menuData.data, type: "article" },
-      {
-        siteName:
-          logoResponse?.data?.value?.regionEntity ||
-          "Pemerintah Kabupaten Muara Enim",
-      }
-    );
+    const menuData = await SettingService.getStaticPage(menuItem?.staticPage || "");
+    return formatMetadata({ ...menuData.data, type: "article" }, { siteName: logoResponse?.data?.value?.regionEntity || "Pemerintah Kabupaten Muara Enim", defaultImage: logoResponse?.data?.value?.imageUrl });
   } catch {
     return {
       title: `Menu | Pemerintah Kabupaten Muara Enim`,
@@ -81,8 +72,8 @@ export default async function DynamicPage({
 }: DynamicPageProps & PageProps) {
   const unwrappedParams = await params;
   const path = Array.isArray(unwrappedParams.slug)
-      ? unwrappedParams.slug
-      : [];
+    ? unwrappedParams.slug
+    : [];
   try {
     const { data: menu } = await SettingService.getSetting(
       `menu-${process.env.NEXT_PUBLIC_VILLAGE_ID}`,
@@ -97,7 +88,7 @@ export default async function DynamicPage({
 
     return (
       <div className="min-h-screen flex justify-center w-full py-4">
-        <div className="w-full px-6 sm:px-0 max-w-lg md:max-w-3xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl">      
+        <div className="w-full px-6 sm:px-0 max-w-lg md:max-w-3xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl">
           <AsideContent>
             <RichTextContent content={staticPage.content} className="pr-3" />
           </AsideContent>
@@ -105,10 +96,10 @@ export default async function DynamicPage({
       </div>
     );
   } catch {
-     if (validateAndRedirect(path)) {
+    if (validateAndRedirect(path)) {
       const redirects: Record<string, string> = {
-      tour: '/tour',
-      article: '/article',
+        tour: '/tour',
+        article: '/article',
       };
       return redirect(redirects[path[0]] || '/');
     }

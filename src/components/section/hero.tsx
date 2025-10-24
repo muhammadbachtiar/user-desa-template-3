@@ -4,7 +4,7 @@ import Refetch from "../shared/refetch";
 import useSetting from "@/hooks/settings/useSettings";
 
 export default function Hero() {
-    const { data, isLoading, isFetching, refetch, isError } = useSetting(`hero-${process.env.NEXT_PUBLIC_VILLAGE_ID}`, {});
+  const { data, isLoading, isFetching, refetch, isError } = useSetting(`hero-${process.env.NEXT_PUBLIC_VILLAGE_ID}`, {});
 
   return (
     <section className="relative h-screen sm:h-[600px] w-[98%] min-h-96 flex justify-center items-center mb-[54px] ">
@@ -39,8 +39,8 @@ export default function Hero() {
                   )}
                   <div className="absolute top-0 left-0 w-full h-full bg-black opacity-30"></div>
                   <div className="max-w-4xl relative z-10 px-6 md:px-0 text-white text-center py-16 lg:py-32">
-                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-center">{data?.value?.title || "[Judul hero belum diatur]"}</h1>
-                      <p className="text-lg md:text-xl mb-6 text-center">{data?.value?.description || "[Deskripsi hero belum diatur]"}</p>
+                     <h1 className="text-3xl md:text-5xl font-bold mb-4 text-center">{data?.value ? data.value.title ?? "" : "[Judul hero belum diatur]"}</h1>
+                      <p className="text-lg md:text-xl mb-6 text-center">{data?.value  ? data?.value?.description ?? "" : "[Deskripsi hero belum diatur]"}</p>
                   </div>
               </>
             )

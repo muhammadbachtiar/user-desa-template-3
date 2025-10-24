@@ -7,6 +7,7 @@ export type BaseContent = {
   publishedAt?: string
   updatedAt?: string
   coverImage?: string
+  thumbnail?: string | null;
 }
 
 export type ContentMetadata = {
@@ -51,6 +52,7 @@ export async function formatMetadata<T extends Content>(
   options?: {
     baseUrl?: string
     siteName?: string
+    defaultImage?: string
     defaultAuthor?: string
     parent?: ResolvingMetadata
   },
@@ -61,7 +63,12 @@ export async function formatMetadata<T extends Content>(
     defaultAuthor = "Admin Pemkab Muara Enim",
   } = options || {}
 
-  const author = getMetadataValue(content.meta, "author") || defaultAuthor
+  const authorRaw = getMetadataValue(content.meta, "author")
+  const author = typeof authorRaw === "string"
+    ? authorRaw
+    : Array.isArray(authorRaw)
+    ? authorRaw.join(", ")
+    : defaultAuthor
   const keywords = getMetadataValue(content.meta, "keywords")
   const formattedKeywords = formatKeywords(keywords)
 
@@ -74,6 +81,29 @@ export async function formatMetadata<T extends Content>(
     keywords: formattedKeywords,
     alternates: {
       canonical: canonicalUrl,
-    }
+    },
+    openGraph: {
+      title: `${content.title || content.meta.find((item) => item.key === "tittle")?.value} | ${siteName}`,
+      description: content.description,
+      url: canonicalUrl,
+      siteName,
+      images: [
+        {
+          url: content.thumbnail || options?.defaultImage || `${baseUrl}/default-og-image.jpg`,
+          width: 1200,
+          height: 630,
+          alt: content.title,
+        },
+      ],
+      type: content.type === "article" ? "article" : "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: content.title,
+      description: content.description,
+      images: [content.coverImage || (getMetadataValue(content.meta, "twitter:image") as string) || `${baseUrl}/default-twitter-image.jpg`],
+      creator: author,
+    },
+
   }
 }

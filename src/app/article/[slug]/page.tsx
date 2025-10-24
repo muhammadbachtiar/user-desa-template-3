@@ -34,9 +34,8 @@ export async function generateMetadata({
     return formatMetadata(
       { ...article, type: "article" },
       {
-        siteName:
-          logoResponse?.data?.value?.regionEntity ||
-          "Pemerintah Kabupaten Muara Enim",
+        siteName: logoResponse?.data?.value?.regionEntity || "Pemerintah Kabupaten Muara Enim",
+        defaultImage: logoResponse?.data?.value?.imageUrl,
       }
     );
   } catch {
@@ -49,20 +48,20 @@ export async function generateMetadata({
 export default async function ArticleDetailPage({
   params,
 }: DynamicPageProps & PageProps) {
-  const { slug } =  params;
+  const { slug } = params;
   try {
     const article = await getArticle(slug);
-   
+
     return (
       <div className="min-h-screen flex justify-center w-full">
         <div className="w-full px-6 sm:px-0 max-w-lg md:max-w-3xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl">
-          <ArticleDetailClient  initialData={article} />
+          <ArticleDetailClient initialData={article} />
         </div>
       </div>
     );
   } catch {
-     if (validateAndRedirect([params.slug])) {
-        return redirect("/article");
+    if (validateAndRedirect([params.slug])) {
+      return redirect("/article");
     }
     return (
       <div className="flex flex-col text-center items-center justify-center h-96 w-full text-gray-700">
