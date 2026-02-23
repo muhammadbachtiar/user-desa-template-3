@@ -23,10 +23,10 @@ export default function ArticleCard({thumbnail, title, slug, category_name, publ
             />
           </div>
             <div className="p-1 pe-6">
-                <div className='flex flex-row col-span-8 my-2 gap-1 justify-items-start items-start'>
+                <div className='flex flex-row col-span-8 my-2 gap-1 justify-items-start items-start dark:text-white'>
                     <span className="self-center align-baseline text-base font-semibold uppercase text-[#929AAB]">{category_name}</span>
                     <div className="self-center w-px h-4 bg-gray-400"></div>
-                    <span className="self-center align-baseline text-xs font-medium text-black">{published_at}</span>
+                    <span className="self-center align-baseline text-xs font-medium text-black dark:text-white">{published_at}</span>
                 </div>
                 <h5 className="my-2 leading-5 text-lg font-bold line-clamp-3  tracking-tight text-gray-900 dark:text-white">{title}</h5>
                 <p className="mb-3 font-normal text-sm line-clamp-3 leading-5 text-gray-500 lg:text-gray-800 dark:text-gray-400">{description}</p>

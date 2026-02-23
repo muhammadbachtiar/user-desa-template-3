@@ -35,8 +35,8 @@ export default function Logo() {
                         height={300}
                       />
                     <div className='flex flex-col justify-center items-start'>
-                        <span className={`font-bold text-md leading-5 text-start align-baseline text-md tracking-tighter text-black`}>{ logo?.value?.regionEntity ?? "[Judul logo belum diatur]"} </span>
-                        <span className={`text-xs font-semibold text-start align-baseline leading-3 italic text-black`}>{ logo?.value?.regionDescription ?? "[Sub judul logo belum diatur]"} </span>
+                        <span className={`font-bold text-md leading-5 text-start align-baseline text-md tracking-tighter text-black dark:text-white`}>{ logo?.value?.regionEntity ?? "[Judul logo belum diatur]"} </span>
+                        <span className={`text-xs font-semibold text-start align-baseline leading-3 italic text-black dark:text-white`}>{ logo?.value?.regionDescription ?? "[Sub judul logo belum diatur]"} </span>
                     </div>
                 </Link>
               </>

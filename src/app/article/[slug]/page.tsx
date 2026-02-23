@@ -48,7 +48,7 @@ export async function generateMetadata({
 export default async function ArticleDetailPage({
   params,
 }: DynamicPageProps & PageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   try {
     const article = await getArticle(slug);
 
@@ -60,7 +60,7 @@ export default async function ArticleDetailPage({
       </div>
     );
   } catch {
-    if (validateAndRedirect([params.slug])) {
+    if (validateAndRedirect([slug])) {
       return redirect("/article");
     }
     return (

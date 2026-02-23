@@ -3,15 +3,13 @@
 import SliderCard from "../shared/sliderInfografis";
 
 export default function Infografis({slideToShow = 4}) {
-
     return (
-      <section className="relative w-full flex justify-center items-center">
-        <div className="max-w-full w-full grid grid-cols-9 gap-2 dark:bg-gray-700 dark:border-gray-600">
-              <div className="col-span-9 max-w-full w-full justify-center overflow-hidden dark:bg-gray-800 dark:border-gray-700">                  
-                <SliderCard slideToShow={slideToShow} />
-            </div>
+      <section className="relative w-full flex flex-col justify-center items-center">
+        <div className="w-full">
+          <div className="w-full overflow-hidden">                  
+            <SliderCard slideToShow={slideToShow} />
+          </div>
         </div>
       </section>
     );
   }
-  

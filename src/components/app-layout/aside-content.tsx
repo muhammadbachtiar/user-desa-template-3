@@ -104,9 +104,6 @@ export default function AsideContent({
             </ul>
           </div>
           <div>
-            <h2 className="text-xl font-bold text-blue-500 mb-4 pb-2 border-gray-300 border-b">
-              Infografis
-            </h2>
             <div className="relative">
               <Infografis slideToShow={1} />
             </div>

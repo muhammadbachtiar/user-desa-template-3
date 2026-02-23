@@ -78,7 +78,7 @@ export function MenuItem({ item, basePath = "", level = 0 }: MenuItemProps) {
           {isClickable ? (
             <Link href={fullPath}>
               <div 
-                className={`flex whitespace-nowrap overflow-hidden max-w-[10rem]
+                className={`flex whitespace-nowrap overflow-hidden max-w-[10rem] dark:text-white
                   "inline-flex items-center px-4 py-2 text-sm font-bold transition-all duration-200",
                   "focus:outline-none",
                   ${isActive ? "border-b-2 border-black text-black" 
@@ -91,9 +91,9 @@ export function MenuItem({ item, basePath = "", level = 0 }: MenuItemProps) {
             </Link>
           ) : (
             <MenuButton 
-              className={`flex whitespace-nowrap overflow-hidden max-w-[10rem]
+              className={`flex whitespace-nowrap overflow-hidden max-w-[10rem] dark:text-white
                 "inline-flex items-center px-4 py-2 text-sm font-bold transition-all duration-200",
-                "focus:outline-none text-gray-700 hover:border-b-2 hover:border-gray-300",
+                "focus:outline-none text-gray-700 hover:border-b-2 hover:border-gray-300 ",
                 ${hasChildren ? "pr-1" : ""}`
               }
               onClick={() => setIsOpen(!isOpen)}
@@ -123,7 +123,7 @@ export function MenuItem({ item, basePath = "", level = 0 }: MenuItemProps) {
             >
               <MenuItems 
                 className={
-                  "absolute right-0 z-50 mt-1 w-60 max-h-[70vh] overflow-y-auto rounded-sm bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border-t-2 border-black"}
+                  "absolute z-50 right-0 z-50 mt-1 w-60 max-h-[70vh] overflow-y-auto rounded-sm bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border-t-2 border-black"}
               >
                 <div className="py-1">
                   {sortedChildren.map((child) => (

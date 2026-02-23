@@ -1,6 +1,6 @@
 'use client'
 
-import { PageProps } from "../../../../.next/types/app/search/[search]/page";
+// Hapus import PageProps yang error karena merujuk ke internal .next
 import { use, useState } from "react";
 import Refetch from "@/components/shared/refetch";
 import useTour from "@/hooks/contents/tour/useList";
@@ -9,19 +9,52 @@ import { Infografis } from "@/services/controlers/infografis/type";
 import Link from "next/link";
 import LightboxImage from "@/components/shared/Lightbox";
 import useArticle from "@/hooks/contents/article/useList";
+import useFeatureFlags from "@/hooks/settings/useFeatureFlags";
+import { BiSearch, BiNews, BiImage, BiMap } from "react-icons/bi";
 
+// Next.js 15: params dan searchParams adalah Promise
+interface PageProps {
+    params: Promise<{ search: string }>;
+    searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}
 
-interface DynamicPageProps {
-    params: { search?: string };
-  }
+// Badge component untuk label tipe konten
+function TypeBadge({ type }: { type: "article" | "infografis" | "tour" }) {
+    const config = {
+        article: { label: "Artikel", icon: BiNews, color: "bg-blue-100 text-blue-700" },
+        infografis: { label: "Infografis", icon: BiImage, color: "bg-emerald-100 text-emerald-700" },
+        tour: { label: "Wisata", icon: BiMap, color: "bg-amber-100 text-amber-700" },
+    };
+    const { label, icon: Icon, color } = config[type];
+    return (
+        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${color}`}>
+            <Icon className="w-3 h-3" />
+            {label}
+        </span>
+    );
+}
 
-export default function Home({ params }: DynamicPageProps & PageProps) {
+// Unified search result item
+interface SearchResultItem {
+    id: string | number;
+    type: "article" | "infografis" | "tour";
+    title: string;
+    description?: string;
+    slug?: string;
+    href?: string;
+    onClick?: () => void;
+}
+
+export default function Home({ params }: PageProps) {
     const unwrappedParams = use(params);
     const [searchValue, setSearchValue] = useState(unwrappedParams.search || '');
+    const { isSectionEnabled } = useFeatureFlags();
 
-    const { data: articles, isLoading: IsArticleLoading, isFetching:IsArticleFetching, refetch:refetchArticle, isError:isArticleError} = useArticle({"search": searchValue, "page_size": 6});
-    const { data: tour, isLoading: isTourLoading, isFetching: isTourFetching, refetch: refetchTour, isError: isTourError } = useTour({"search": searchValue});
-    const { data: infografis, isLoading: isInfografisLoading, isFetching: isInfografisFetching, refetch: refetchInfografis, isError: isInfografisError } = useInfografis({"search": searchValue});
+    const isTourEnabled = isSectionEnabled("tour");
+
+    const { data: articles, isLoading: isArticleLoading, isFetching: isArticleFetching, refetch: refetchArticle, isError: isArticleError } = useArticle({ "search": searchValue, "page_size": 6 });
+    const { data: tour, isLoading: isTourLoading, isFetching: isTourFetching, refetch: refetchTour, isError: isTourError } = useTour({ "search": searchValue });
+    const { data: infografis, isLoading: isInfografisLoading, isFetching: isInfografisFetching, refetch: refetchInfografis, isError: isInfografisError } = useInfografis({ "search": searchValue });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value);
@@ -30,190 +63,175 @@ export default function Home({ params }: DynamicPageProps & PageProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
 
-  return (
-      <>
-         <div className="min-h-screen flex justify-center w-full">
-            <div className="w-full px-6 sm:px-0 max-w-lg md:max-w-3xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl col-span-6 grid grid-cols-6 gap-x-4 gap-y-8">
-                <div className="relative w-full col-span-6">
-                    <input id="search-dropdown"value={searchValue} onChange={handleChange} className="block py-3 px-5 pe-12 w-full rounded-sm text-sm text-gray-900 bg-gray-100 placeholder:text-black border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="Cari judul ..." />
-                    <span className="absolute top-0 end-0 py-3 px-5 sm:ms-4 text-sm font-medium h-full text-white focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                        </svg>
-                    </span>
-                </div>
-                <div className="relative w-full hidden md:block md:col-span-2 lg:col-span-1">
-                    <div className="px-4 pb-0 sticky top-4 text-gray-900 md:pb-4 dark:text-white">
-                        <ul className="space-y-4" aria-labelledby="mega-menu-dropdown-button">
-                            <li>
-                                <a href="#article" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500">
-                                    Artikel
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#infografis" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500">
-                                    Infografis
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#wisata" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500">
-                                    Wisata
-                                </a>
-                            </li>
-                        </ul>
+    // Gabungkan semua data menjadi satu list
+    const isLoading = isArticleLoading || isInfografisLoading || (isTourEnabled && isTourLoading);
+    const isFetching = isArticleFetching || isInfografisFetching || (isTourEnabled && isTourFetching);
+    const hasAnyError = isArticleError || isInfografisError || (isTourEnabled && isTourError);
+
+    // Build unified results
+    const results: SearchResultItem[] = [];
+
+    // Artikel
+    const articleData = articles?.pages?.[0]?.data || [];
+    articleData.forEach((article: { id: string | number; title: string; description?: string; slug?: string }) => {
+        results.push({
+            id: `article-${article.id}`,
+            type: "article",
+            title: article.title,
+            description: article.description,
+            slug: article.slug,
+            href: `/article/${article.slug}`,
+        });
+    });
+
+    // Infografis
+    if (infografis && Array.isArray(infografis)) {
+        infografis.forEach((item: Infografis, index: number) => {
+            results.push({
+                id: `infografis-${item.id}`,
+                type: "infografis",
+                title: item.title,
+                description: item.description,
+                onClick: () => { setIsOpen(true); setCurrentIndex(index); },
+            });
+        });
+    }
+
+    // Tour (hanya jika enabled)
+    if (isTourEnabled) {
+        const tourData = tour?.pages?.[0]?.data || [];
+        tourData.forEach((item: { id: string | number; title: string; description?: string; slug?: string }) => {
+            results.push({
+                id: `tour-${item.id}`,
+                type: "tour",
+                title: item.title,
+                description: item.description,
+                slug: item.slug,
+                href: `/tour/${item.slug}`,
+            });
+        });
+    }
+
+    const totalResults = results.length;
+
+    return (
+        <>
+            <div className="min-h-screen flex justify-center w-full">
+                <div className="w-full px-6 sm:px-0 max-w-lg md:max-w-3xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl flex flex-col gap-6 py-6">
+
+                    {/* Search Input */}
+                    <div className="relative w-full">
+                        <div className="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
+                            <BiSearch className="w-5 h-5 text-gray-400" />
+                        </div>
+                        <input
+                            id="search-dropdown"
+                            value={searchValue}
+                            onChange={handleChange}
+                            className="block w-full py-3.5 ps-12 pe-5 rounded-xl text-sm text-gray-900 bg-gray-100 placeholder:text-gray-500 border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                            placeholder="Cari artikel, infografis, wisata ..."
+                        />
                     </div>
-                </div>
-                <div className="relative w-full col-span-6 grid grid-cols-6 gap-y-8 md:col-span-4 lg:col-span-5 overflow-y-auto">
-                    <div className="col-span-6">
-                        <div className="col-span-6">
-                            <span id="article" className="self-center align-baseline text-2xl leading-3 tracking-tighter font-semibold uppercase text-black">Artikel</span>
+
+                    {/* Result count */}
+                    {!isLoading && !isFetching && (
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-500">
+                                {totalResults > 0
+                                    ? `Ditemukan ${totalResults} hasil untuk "${searchValue}"`
+                                    : searchValue
+                                        ? `Tidak ada hasil untuk "${searchValue}"`
+                                        : "Masukkan kata kunci untuk mencari"
+                                }
+                            </span>
                         </div>
-                        <div className="col-span-6">
-                            <hr className="h-px my-3 text-gray-400 bg-gray-200 border-1 dark:bg-gray-700"></hr>
-                        </div>
-                         <div className="col-span-6">  
-                            <dl className="text-gray-900 divide-y divide-gray-100 dark:text-white dark:divide-gray-700">
-                                { IsArticleLoading || (IsArticleFetching || (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0)) && isArticleError ? (
-                                     Array.from({ length: 4 }).map((_, index) => (
-                                        <div
-                                        key={index}
-                                        className="flex flex-col py-3 animate-pulse bg-gray-50 hover:bg-gray-100"
-                                        >
-                                        <dd className="h-6 bg-gray-200 rounded w-3/4 mb-2"></dd>
-                                        <dt className="h-4 bg-gray-200 rounded w-1/2"></dt>
-                                        </div>
-                                    ))
-                                ) : !isArticleError && !IsArticleFetching && (!articles || !articles.pages[0] || articles.pages[0]?.data.length === 0) ? (
-                                <div className="flex flex-col items-center justify-center py-12">
-                                    <p className="text-black text-2xl dark:text-gray-400 text-center">Artikel tidak ditemukan</p>
-                                </div>
-                                ) : isArticleError && !IsArticleFetching ? (
-                                <div className="flex flex-col items-center justify-center py-12">
-                                    <Refetch refetch={refetchArticle} />
-                                </div>
-                                ) : (
-                                articles?.pages[0].data.map((article, index) => (
-                                    <Link  key={article.id} href={`/article/${article.slug}`} tabIndex={1} className="col-span-6 md:col-span-3  lg:col-span-2 w-full">
-                                                <div
-                                                className={`flex flex-col py-3 ${
-                                                    index % 2 === 0 ? 'bg-gray-50' : ''
-                                                } hover:bg-gray-100 transition-colors duration-200`}
-                                                >
-                                                <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">
-                                                    <span className="block font-semibold text-gray-900">{article.title}</span>
-                                                </dt>
-                                                <dd className="text-mb text-gray-500 line-clamp-3 dark:text-white">
-                                                    {article.description}
-                                                </dd>
-                                            </div>
-                                    </Link>
-                                ))
-                                )}
-                            </dl>
-                        </div>
-                    </div>
-                    <div className="col-span-6">
-                        <div className="col-span-6">
-                            <span id="infografis" className="self-center align-baseline text-2xl leading-3 tracking-tighter font-semibold uppercase text-black">Infografis</span>
-                        </div>
-                        <div className="col-span-6">
-                            <hr className="h-px my-3 bg-gray-50 text-gray-400 border-1 dark:bg-gray-700"></hr>
-                        </div>
-                         <div className="col-span-6">  
-                            {isInfografisLoading || isInfografisFetching && (!infografis || infografis.length === 0) ? (
-                                Array.from({ length: 4 }).map((_, index) => (
-                                    <div
+                    )}
+
+                    {/* Results */}
+                    <div className="flex flex-col divide-y divide-gray-100 dark:divide-gray-700">
+                        {isLoading || (isFetching && results.length === 0) ? (
+                            // Loading skeleton
+                            Array.from({ length: 6 }).map((_, index) => (
+                                <div
                                     key={index}
-                                    className="flex flex-col py-3 animate-pulse bg-gray-50 hover:bg-gray-100"
-                                    >
-                                    <dd className="h-6 bg-gray-200 rounded w-3/4 mb-2"></dd>
-                                    <dt className="h-4 bg-gray-200 rounded w-1/2"></dt>
+                                    className="flex flex-col gap-2 py-4 animate-pulse"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <div className="h-5 w-16 rounded-full bg-gray-200"></div>
+                                        <div className="h-5 w-3/5 rounded bg-gray-200"></div>
                                     </div>
-                                ))
-                                ) : !isInfografisFetching && (!infografis || infografis.length === 0) ? (
-                                <div className="flex flex-col items-center justify-center py-12">
-                                    <p className="text-black text-2xl dark:text-gray-400 text-center">Infografis tidak ditemukan</p>
+                                    <div className="h-4 w-4/5 rounded bg-gray-100"></div>
                                 </div>
-                                ) : isInfografisError && !isInfografisFetching ? (
-                                <div className="flex flex-col items-center justify-center py-12">
-                                    <Refetch refetch={refetchInfografis} />
+                            ))
+                        ) : hasAnyError && results.length === 0 ? (
+                            // Error state
+                            <div className="flex flex-col items-center justify-center py-16 gap-4">
+                                <p className="text-gray-500 text-lg">Terjadi kesalahan saat mencari</p>
+                                <div className="flex gap-2">
+                                    {isArticleError && <Refetch refetch={refetchArticle} />}
+                                    {isInfografisError && <Refetch refetch={refetchInfografis} />}
+                                    {isTourEnabled && isTourError && <Refetch refetch={refetchTour} />}
                                 </div>
-                                ) : (
-                                <>
-                                    {
-                                        infografis.map((infografis: Infografis , index:number) => (
-                                            <div 
-                                            key={infografis.id}
-                                            onClick={()=> {setIsOpen(true); setCurrentIndex(index)}}
-                                            className={`flex flex-col py-3 ${
-                                                index % 2 === 0 ? 'bg-gray-50' : ''
-                                            } hover:bg-gray-100 transition-colors duration-200`}
-                                            >
-                                                <dt className="mb-1 font-semibold text-gray-900 md:text-lg dark:text-gray-400">
-                                                    <span className="block">{infografis.title}</span>
-                                                </dt>
-                                                <dd className="text-mb text-gray-500 line-clamp-3 dark:text-white">
-                                                    {infografis.description}
-                                                </dd>
-                                            </div>
-                                        ))
+                            </div>
+                        ) : results.length === 0 ? (
+                            // Empty state
+                            <div className="flex flex-col items-center justify-center py-16 gap-3">
+                                <BiSearch className="w-12 h-12 text-gray-300" />
+                                <p className="text-gray-400 text-lg text-center">
+                                    {searchValue
+                                        ? "Tidak ada hasil yang ditemukan"
+                                        : "Ketik kata kunci untuk mulai mencari"
                                     }
-                                   <LightboxImage data={infografis} isOpen={isOpen} currentIndex={currentIndex} setIsOpen={setIsOpen} />
-                                </>
-                            )}
-                        </div>
-                    </div>
-                    <div className="col-span-6">
-                        <div className="col-span-6">
-                            <span id="wisata" className="self-center align-baseline text-2xl leading-3 tracking-tighter font-semibold uppercase text-black">Wisata</span>
-                        </div>
-                        <div className="col-span-6">
-                            <hr className="h-px my-3 text-gray-400 bg-gray-200 border-1 dark:bg-gray-700"></hr>
-                        </div>
-                         <div className="col-span-6">  
-                            <dl className="text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-                                {isTourLoading || isTourFetching && tour?.pages[0]?.data.length === 0 ? (
-                                    Array.from({ length: 4 }).map((_, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex flex-col py-3 animate-pulse bg-gray-50 hover:bg-gray-100"
-                                            >
-                                            <dd className="h-6 bg-gray-200 rounded w-3/4 mb-2"></dd>
-                                            <dt className="h-4 bg-gray-200 rounded w-1/2"></dt>
+                                </p>
+                            </div>
+                        ) : (
+                            // Results list
+                            results.map((item) => {
+                                const content = (
+                                    <div
+                                        className="flex flex-col gap-1.5 py-4 px-2 -mx-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            <TypeBadge type={item.type} />
+                                            <h3 className="font-semibold text-gray-900 dark:text-white text-base line-clamp-1">
+                                                {item.title}
+                                            </h3>
                                         </div>
-                                    ))
-                                    ) : !isTourFetching && tour?.pages[0]?.data.length === 0 ? (
-                                        <div className="flex flex-col items-center justify-center py-12">
-                                            <p className="text-black text-2xl dark:text-gray-400 text-center">Wisata tidak ditemukan</p>
-                                        </div>
-                                    ) : isTourError && !isTourFetching ? (
-                                        <div className="flex flex-col items-center justify-center py-12">
-                                            <Refetch refetch={refetchTour} />
-                                        </div>
-                                    ) : (
-                                    tour?.pages[0]?.data.map((tour, index) => (
-                                        <Link  key={tour.id} href={`/tour/${tour.slug}`} tabIndex={1} className="col-span-6 md:col-span-3  lg:col-span-2 w-full">
-                                            <div
-                                            className={`flex flex-col py-3 ${
-                                                index % 2 === 0 ? 'bg-gray-50' : ''
-                                            } hover:bg-gray-100 transition-colors duration-200`}
-                                            >
-                                                <dt className="mb-1 font-semibold text-gray-900 md:text-lg dark:text-gray-400">
-                                                    <span className="block">{tour.title}</span>
-                                                </dt>
-                                                <dd className="text-mb text-gray-500 line-clamp-3 dark:text-white">
-                                                    {tour.description}
-                                                </dd>
-                                            </div>
+                                        {item.description && (
+                                            <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 pl-0.5">
+                                                {item.description}
+                                            </p>
+                                        )}
+                                    </div>
+                                );
+
+                                if (item.href) {
+                                    return (
+                                        <Link key={item.id} href={item.href} tabIndex={1}>
+                                            {content}
                                         </Link>
-                                    ))
-                                )}
-                            </dl>
-                        </div>
+                                    );
+                                }
+
+                                if (item.onClick) {
+                                    return (
+                                        <div key={item.id} onClick={item.onClick} role="button" tabIndex={1}>
+                                            {content}
+                                        </div>
+                                    );
+                                }
+
+                                return <div key={item.id}>{content}</div>;
+                            })
+                        )}
                     </div>
+
+                    {/* Lightbox untuk infografis */}
+                    {infografis && Array.isArray(infografis) && infografis.length > 0 && (
+                        <LightboxImage data={infografis} isOpen={isOpen} currentIndex={currentIndex} setIsOpen={setIsOpen} />
+                    )}
                 </div>
             </div>
-        </div>
-      </>
-  );
+        </>
+    );
 }
