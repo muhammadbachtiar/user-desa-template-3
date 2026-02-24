@@ -4,9 +4,9 @@ import Script from "next/script";
 import useGoogleAnalyticsSettings from "@/hooks/settings/useGoogleAnalyticsSettings";
 
 export default function GoogleAnalytics() {
-  const { gaId } = useGoogleAnalyticsSettings();
+  const { gaId, isLoading } = useGoogleAnalyticsSettings();
 
-  if (!gaId) return null;
+  if (isLoading || !gaId) return null;
 
   return (
     <>
