@@ -34,7 +34,10 @@ function useGoogleAnalyticsSettings() {
 
     const settingData = data?.data as GoogleAnalyticsSettingData | undefined;
 
-    // Use value.id if available, otherwise fallback to env
+    if (isLoading) {
+        return { gaId: null, isLoading: true, isError: false };
+    }
+
     const gaId = settingData?.value?.id ?? process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? '';
 
     return {
