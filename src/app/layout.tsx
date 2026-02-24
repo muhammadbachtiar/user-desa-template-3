@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+// import { Geist, Geist_Mono } from "next/font/google"; // Disingkirkan sementara karena error koneksi saat build
 import Header from "@/components/app-layout/header";
 import Footer from "@/components/app-layout/footer";
 import "./globals.css";
@@ -10,15 +10,14 @@ import FloatingWeatherButton from "@/components/weather/FloatingWeatherButton";
 
 import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
 
-const geistSans = Geist({
+// Menggunakan variabel font sistem sebagai fallback agar build tidak gagal karena fetch Google Fonts
+const geistSans = {
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+};
 
-const geistMono = Geist_Mono({
+const geistMono = {
   variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+};
 
 export async function generateMetadata() {
    try {
