@@ -10,7 +10,6 @@ import FloatingWeatherButton from "@/components/weather/FloatingWeatherButton";
 
 import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
 
-// Menggunakan variabel font sistem sebagai fallback agar build tidak gagal karena fetch Google Fonts
 const geistSans = {
   variable: "--font-geist-sans",
 };
@@ -40,29 +39,41 @@ export async function generateMetadata() {
   }
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   
+  let gaId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || "";
+  try {
+    const villageId = process.env.NEXT_PUBLIC_VILLAGE_ID;
+    const response = await SettingService.getSetting(`google-analytics-id-${villageId}`);
+    if (response?.data?.value?.id) {
+      gaId = response.data.value.id;
+    }
+  } catch (error) {
+    console.error("Failed to fetch GA ID on server:", error);
+  }
+
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* 2. Kirim gaId sebagai prop ke komponen GoogleAnalytics */}
+        <GoogleAnalytics gaId={gaId} />
+        
         <ClientWrapper>
-          <GoogleAnalytics/>
           <div className="min-h-screen min-w-full bg-primary flex flex-col justify-between items-start w-full">
-                <Header/>
-                  <main className="flex flex-col justify-center items-center w-full mt-2 ">
-                    {children}
-                  </main>
-                <Footer/>
-            </div>
-            <FloatingWeatherButton />
-            <Chatbot/>
+            <Header/>
+            <main className="flex flex-col justify-center items-center w-full mt-2 ">
+              {children}
+            </main>
+            <Footer/>
+          </div>
+          <FloatingWeatherButton />
+          <Chatbot/>
         </ClientWrapper>
+        
         <Script
           src="https://cdn.jsdelivr.net/npm/sienna-accessibility@latest/dist/sienna-accessibility.umd.js"
           strategy="afterInteractive"
