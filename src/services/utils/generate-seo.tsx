@@ -36,8 +36,8 @@ export type Video = BaseContent & {
 export type Content = Article | Infographic | Video
 
 export function getMetadataValue(meta: ContentMetadata[] | null, key: string): string | string[] | null {
-   if (!Array.isArray(meta) || meta.length === 0) return null;
-  
+  if (!Array.isArray(meta) || meta.length === 0) return null;
+
   const entry = meta.find((item) => item.key === key);
   return entry ? entry.value : null;
 }
@@ -67,23 +67,23 @@ export async function formatMetadata<T extends Content>(
   const author = typeof authorRaw === "string"
     ? authorRaw
     : Array.isArray(authorRaw)
-    ? authorRaw.join(", ")
-    : defaultAuthor
+      ? authorRaw.join(", ")
+      : defaultAuthor
   const keywords = getMetadataValue(content.meta, "keywords")
   const formattedKeywords = formatKeywords(keywords)
 
   const canonicalUrl = `${baseUrl}/${content.type}s/${content.slug}`
- 
+
   return {
-    title: `${content.title || content.meta.find((item) => item.key === "tittle")?.value} | ${siteName}`,
-    description: `${content.description || content.meta.find((item) => item.key === "description")?.value}` || "Informasi terbaru dari Pemerintah Kabupaten Muara Enim",
+    title: `${content.title || content.meta?.find((item) => item.key === "tittle")?.value || "Menu"} | ${siteName}`,
+    description: `${content.description || content.meta?.find((item) => item.key === "description")?.value}` || "",
     authors: [{ name: author as string }],
     keywords: formattedKeywords,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: `${content.title || content.meta.find((item) => item.key === "tittle")?.value} | ${siteName}`,
+      title: `${content.title || content.meta?.find((item) => item.key === "tittle")?.value || "Menu"} | ${siteName}` || "",
       description: content.description,
       url: canonicalUrl,
       siteName,

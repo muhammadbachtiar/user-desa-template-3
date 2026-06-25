@@ -49,8 +49,8 @@ function ServiceCard({ item, onClick, index = 0, className = "w-full" }) {
       </span>
 
       {/* Description (only shown on md+) */}
-      <span className="hidden md:block text-[10px] text-gray-500 dark:text-gray-400 text-center line-clamp-2 leading-snug max-h-[40px] max-w-[140px]">
-        {item.description || `Informasi tentang ${item.title}`}
+      <span className="hidden md:block text-[10px] text-gray-500 dark:text-gray-400 text-center leading-snug max-h-[40px] max-w-[150px]">
+        <p className='line-clamp-3 w-full'>{item.description || `Informasi tentang ${item.title}`}</p>
       </span>
     </div>
   );
@@ -150,7 +150,7 @@ function MobileBarCard({ item, onClick }) {
 // ─── Main Component ───
 export default function App() {
   const [selectedService, setSelectedService] = useState(null);
-  
+
   // Feature flags hook
   const { isSectionEnabled, pressRelease } = useFeatureFlags();
 
@@ -164,11 +164,11 @@ export default function App() {
       const link = item.link;
 
       if (link === './tour' || link === 'tour' || link.includes('tour')) {
-         return isSectionEnabled('tour');
+        return isSectionEnabled('tour');
       }
 
       if (link === 'press-release' || link === '/press-release' || link.includes('press-release')) {
-         return pressRelease;
+        return pressRelease;
       }
 
       return true;
@@ -254,12 +254,12 @@ export default function App() {
             <p className="w-full text-gray-500 text-center text-lg dark:text-gray-400 py-10">Layanan tidak tersedia</p>
           ) : (
             services.map((item, i) => (
-              <ServiceCard 
-                key={item.id ?? item.title} 
-                item={item} 
-                onClick={handleOpenModal} 
+              <ServiceCard
+                key={item.id ?? item.title}
+                item={item}
+                onClick={handleOpenModal}
                 index={i}
-                className="w-[45%] sm:w-[30%] md:w-[22%] lg:w-[18%] max-w-[220px]" 
+                className="w-[45%] sm:w-[30%] md:w-[22%] lg:w-[18%] max-w-[220px]"
               />
             ))
           )}
